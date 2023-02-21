@@ -22,29 +22,121 @@ class _RulesState extends State<Rules> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(children: [
-          _backgroundImage(),
-          Column(
-            children: [
-              const SizedBox(
-                height: 45,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFF2C2623),
+        body: SingleChildScrollView(
+          child: Column(
+                children: [
+                      _headerView(),
+                      Card(
+                        color: const Color.fromRGBO(254, 246, 218, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "INTRODUCTION",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      const Text(
+                                        "Checkers is a two-player board game played on an 8x8 checked board with 12 pieces each."
+                                            "\n\nThe players move their pieces diagonally in the forward direction, and if there's an opponent's piece adjacent to theirs and an empty space on the other side, they can jump over and capture the opponent's piece. \n",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 70.0),
+                                        child: Image.asset(
+                                          "assets/images/checkers1.jpg",
+                                          scale: 5,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      const Text(
+                                        "\nMAIN GOAL",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      const Text(
+                                        "If a piece reaches the last row on the opponent's side, it becomes a 'king' and can move in both directions."
+                                            "\nThe game is won by capturing all the opponent's pieces or by blocking their ability to move.\n",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 70.0),
+                                        child: Image.asset(
+                                          "assets/images/checkers2.jpg",
+                                          scale: 5,
+                                        ),
+                                      ),
+                                      const Text(
+                                        "\nSTRATEGY",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      const Text(
+                                        "It's a good strategy to sacrifice one piece to capture two, keep pieces on the sides to avoid being jumped, and avoid bunching all pieces in the middle. Planning ahead and practicing can also help improve the game.",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                      // _bottomView(context),
+                    ],
+                  )
               ),
-              _headerView()],
           ),
-          // _bottomView(context),
-        ]));
-  }
-
-  Widget _backgroundImage() {
-    return Container(
-        color: const Color(0xFF2C2623)
     );
   }
 
   Widget _headerView() {
     return Padding(
-      padding: const EdgeInsets.all(40.0),
+      padding: const EdgeInsets.only(left: 35.0, right: 40.0, top: 40.0, bottom: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
