@@ -49,73 +49,70 @@ class _RulesState extends State<Rules> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text(
-                                        "INTRODUCTION",
+                                        "\nINTRODUCTION",
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 20,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
-                                        height: 8,
+                                        height: 10,
                                       ),
                                       const Text(
-                                        "Checkers is a two-player board game played on an 8x8 checked board with 12 pieces each."
-                                            "\n\nThe players move their pieces diagonally in the forward direction, and if there's an opponent's piece adjacent to theirs and an empty space on the other side, they can jump over and capture the opponent's piece. \n",
+                                        "Checkers is a two-player board game played on an 8x8 checked board with 12 pieces each. \n"
+                                            "\n\nThe players move their pieces diagonally in the forward direction, and if there's an opponent's piece adjacent to theirs and an empty space on the other side, they can jump over and capture the opponent's piece.",
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 18,
+                                          fontSize: 21,
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 70.0),
+                                        padding: const EdgeInsets.only(left: 85.0),
                                         child: Image.asset(
-                                          "assets/images/checkers1.jpg",
-                                          scale: 5,
+                                          "assets/images/checkers1.png",
+                                          scale: 2,
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
                                       const Text(
-                                        "\nMAIN GOAL",
+                                        "MAIN GOAL",
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 20,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
-                                        height: 8,
+                                        height: 10,
                                       ),
                                       const Text(
-                                        "If a piece reaches the last row on the opponent's side, it becomes a 'king' and can move in both directions."
-                                            "\nThe game is won by capturing all the opponent's pieces or by blocking their ability to move.\n",
+                                        "If a piece reaches the last row on the opponent's side, it becomes a 'king' and can move in both directions.\n\n"
+                                            "\nThe game is won by capturing all the opponent's pieces or by blocking their ability to move.",
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 18,
+                                          fontSize: 21,
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 70.0),
+                                        padding: const EdgeInsets.only(left: 85.0),
                                         child: Image.asset(
-                                          "assets/images/checkers2.jpg",
-                                          scale: 5,
+                                          "assets/images/checkers2.png",
+                                          scale: 2,
                                         ),
                                       ),
                                       const Text(
-                                        "\nSTRATEGY",
+                                        "STRATEGY",
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 20,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
-                                        height: 8,
+                                        height: 10,
                                       ),
                                       const Text(
-                                        "It's a good strategy to sacrifice one piece to capture two, keep pieces on the sides to avoid being jumped, and avoid bunching all pieces in the middle. Planning ahead and practicing can also help improve the game.",
+                                        "It's a good strategy to sacrifice one piece to capture two, keep pieces on the sides to avoid being jumped, and avoid bunching all pieces in the middle.\n\n\n\Planning ahead and practicing can also help improve the game.",
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 18,
+                                          fontSize: 21,
                                         ),
                                       ),
                                     ],
