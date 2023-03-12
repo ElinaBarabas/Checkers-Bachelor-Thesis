@@ -78,6 +78,7 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
+
                   Text(
                     "Checkers",
                     style: TextStyle(

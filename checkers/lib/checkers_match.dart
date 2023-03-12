@@ -23,9 +23,11 @@ class CheckersMatch {
   int numberOfColumns = 8;
   List<List<CheckerboardField>> checkerboard = [];
 
+  List<CheckerboardCoordinate> coordinatesKingPath = [];
+
   CheckersMatch() {
     init();
-    placeInitialCheckers();
+    // placeInitialCheckers();
   }
 
   void init() {
@@ -55,6 +57,21 @@ class CheckersMatch {
     }
 
     return false;
+  }
+
+  bool isOnKingRow(int player, CheckerboardCoordinate checkerboardCoordinate) {
+
+    int currentRow = checkerboardCoordinate.row;
+
+    if (player == 1 && currentRow == numberOfRows - 1) {
+      return true;
+    }
+
+    if (player == 2 && currentRow == 0) {
+      return true;
+    }
+    return false;
+
   }
 
   bool isFieldOnBoard(CheckerboardCoordinate checkerboardCoordinate) {
@@ -144,13 +161,13 @@ class CheckersMatch {
   void moveChecker(Checker checker, CheckerboardCoordinate newCheckerboardCoordinate) {
     getCheckerboardField(checker.coordinate).checker = Checker(0, false, CheckerboardCoordinate(-1, -1));
     getCheckerboardField(newCheckerboardCoordinate).checker = checker;
-    // print("OLD POSITION");
-    // print(checker.coordinate.row);
-    // print(checker.coordinate.column);
+    print("OLD POSITION");
+    print(checker.coordinate.row);
+    print(checker.coordinate.column);
     checker.coordinate = newCheckerboardCoordinate;
-    // print("NEW POSITION");
-    // print(checker.coordinate.row);
-    // print(checker.coordinate.column);
+    print("NEW POSITION");
+    print(checker.coordinate.row);
+    print(checker.coordinate.column);
   }
 
   void changePlayerTurn(){
@@ -287,6 +304,9 @@ class CheckersMatch {
           return canFirstPlayerMove(newChecker, type: 3);  // it returns if the checker of the first player can be moved to right
         });
 
+    print("HELLO");
+    print(canMoveToLeft);
+    print(canMoveToRight);
     return canMoveToLeft || canMoveToRight; // based on the returned values, we know if the checker of the first player can be moved in one/both direction(s) or in neither of them
   }
 
@@ -308,6 +328,205 @@ class CheckersMatch {
 
     return canMoveToLeft || canMoveToRight; // based on the returned values, we know if the checker of the second player can be moved in one/both direction(s) or in neither of them
   }
+
+  bool canKingMove(int typeOfWalking, CheckerboardCoordinate checkerboardCoordinate, {int row = 0, int column = 0, MoveAsKing? moveAsKing, MoveAsKingIfCaptureIsAvailable? moveAsKingIfCaptureIsAvailable, KingCanNotBeMovedThere? kingCanNotBeMovedThere}) {
+
+    if(!containsChecker(checkerboardCoordinate)) {      // first we check if the given coordinate contains a checker; if not, it means that the king can be moved directly there, without any capture
+
+      if(typeOfWalking == 1) {
+        setHighlightSimpleMove(checkerboardCoordinate);
+      }
+
+      if(moveAsKing != null) {
+        moveAsKing(checkerboardCoordinate);
+      }
+      return true;
+    }
+    else { // the case in which the coordinate on which the king is to be moved contains a checker, so we need to check whether is the opponent's piece, in order to highlight the possibility to capture it
+
+      if(containsOpponentChecker(checkerboardCoordinate)) {
+        Checker possibleCapturedChecker = getCheckerboardField(checkerboardCoordinate).checker;
+        CheckerboardCoordinate coordinateAfterCapture = CheckerboardCoordinate.change(checkerboardCoordinate, newRowValue: row, newColumnValue: column);
+
+        if(!containsChecker(coordinateAfterCapture)) {    // we need to check if the king can jump to a new coordinate after capturing the opponent's piece
+           if(moveAsKingIfCaptureIsAvailable != null) {
+             Captured captured = Captured(true, possibleCapturedChecker);
+             moveAsKingIfCaptureIsAvailable(coordinateAfterCapture, captured);
+           }
+           return false;
+        }
+      }
+    }
+
+    if(kingCanNotBeMovedThere != null) {
+      kingCanNotBeMovedThere(checkerboardCoordinate);
+    }
+    return false;
+
+  }
+
+  bool canKingMoveInAnyDirection(Checker checker, int type) {
+    Captured upLeft = computeKingPathCapturing(checker, type, addRowValue: -1, addColumnValue: -1);
+    Captured downLeft = computeKingPathCapturing(checker, type, addRowValue: 1, addColumnValue: -1);
+    Captured upRight = computeKingPathCapturing(checker, type, addRowValue: -1, addColumnValue: 1);
+    Captured downRight = computeKingPathCapturing(checker, type, addRowValue: 1, addColumnValue: 1);
+
+    if(upLeft.isCaptured || upRight.isCaptured || downLeft.isCaptured || downRight.isCaptured)
+      {
+        return true;
+      }
+    return false;
+  }
+
+
+  Captured computeKingPathCapturing(Checker checker, int type, {int addRowValue = 0, int addColumnValue =0}) {
+
+    Captured canBeCaptured = Captured.notCaptured();
+
+    int row = checker.coordinate.row + addRowValue;
+    int column = checker.coordinate.column + addColumnValue;
+
+    if (row < 0 || row > numberOfRows || column < 0 || column > numberOfColumns) {
+      return canBeCaptured;
+    }
+
+    for (int i = 0; i < numberOfRows; i++) {
+      CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
+          row, column);
+
+      bool isVisitedByKing = coordinatesKingPath.where((coordinate) {
+        return coordinate.row == row && coordinate.column == column;
+      })
+          .toList()
+          .isNotEmpty;
+
+      if (isVisitedByKing) {
+        return canBeCaptured;
+      }
+      else {
+        coordinatesKingPath.add(checkerboardCoordinate);
+      }
+
+      bool canKingMoveNext = canKingMove(
+          type, checkerboardCoordinate,
+          row: addRowValue,
+          column: addColumnValue,
+          moveAsKing: (newCheckerboardCoordinate) {
+            if (type == 1) {
+              setHighlightSimpleMove(newCheckerboardCoordinate);
+            }
+          },
+          moveAsKingIfCaptureIsAvailable: (newCheckerboardCoordinate,
+              captured) {
+            if (isFieldOnBoard(newCheckerboardCoordinate)) {
+              canBeCaptured = captured;
+              getCheckerboardField(newCheckerboardCoordinate).capturedChecker =
+                  captured;
+              if (type == 1 && type == 2) {
+                setHighlightMoveWithCapture(newCheckerboardCoordinate);
+              }
+
+              bool canCaptureMore = canKingMoveInAnyDirection(Checker.move(
+                  checker, checkerboardCoordinate: newCheckerboardCoordinate),
+                  3);
+              getCheckerboardField(newCheckerboardCoordinate).canCaptureAgain =
+                  canCaptureMore;
+            }
+          },
+          kingCanNotBeMovedThere: (newCheckerboardCoordinate) {});
+
+      if (!canKingMoveNext) {
+        return canBeCaptured;
+      }
+
+      row += addRowValue;
+      column += addColumnValue;
+
+      if (row < 0 || row > numberOfRows || column < 0 ||
+          column > numberOfColumns) {
+        return canBeCaptured;
+      }
+     }
+      return canBeCaptured;
+    }
+
+    void highlightPossibleMoves(Checker checker, {int type = 1}) {
+        if(!isFieldOnBoard(checker.coordinate))
+          {
+            return;
+          }
+        if(checker.player == 1) {
+          if(checker.isKing) {
+            coordinatesKingPath.clear();
+            canKingMoveInAnyDirection(checker,type);
+          }
+          else {
+            print("HERE");
+            canFirstPlayerMove(checker, type: type);
+            print("HERE");
+          }
+        }
+        if(checker.player == 2) {
+          if(checker.isKing) {
+            coordinatesKingPath.clear();
+            canKingMoveInAnyDirection(checker,type);
+          }
+          else {
+            canSecondPlayerMove(checker, type: type);
+          }
+        }
+
+    }
+
+    bool canCapture(CheckerboardCoordinate checkerboardCoordinate) {
+        Captured capturing = getCheckerboardField(checkerboardCoordinate).capturedChecker;
+        if(capturing != null && capturing.isCaptured) {
+          getCheckerboardField(capturing.checker.coordinate).checker = Checker(0, false, CheckerboardCoordinate(-1, -1));
+          return true;
+        }
+        return false;
+    }
+
+    bool canCaptureMore(Checker checker, CheckerboardCoordinate checkerboardCoordinate) {
+
+        if(checker.isKing) {
+          coordinatesKingPath.clear();
+          return canKingMoveInAnyDirection(checker, 3);
+        }
+        else {
+          return getCheckerboardField(checkerboardCoordinate).canCaptureAgain;
+        }
+    }
+
+    int checkWinner() {
+
+      bool winnerPlayerOne = true;
+      bool winnerPlayerTwo = true;
+
+      for(int i = 0; i < 8; i++)
+        {
+          for(int j = 0; j < 8; j++) {
+            CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(i, j);
+            if(getCheckerboardField(checkerboardCoordinate).checker.player == 1)
+              {
+                winnerPlayerTwo = false;
+              }
+            else if(getCheckerboardField(checkerboardCoordinate).checker.player == 2) {
+                winnerPlayerOne = false;
+            }
+          }
+        }
+
+      if(winnerPlayerTwo == true)
+        {
+          return 2;
+        }
+      else if(winnerPlayerOne == true)
+        {
+          return 1;
+        }
+      return 0;
+    }
 
 }
 
