@@ -18,7 +18,7 @@ typedef KingCanNotBeMovedThere = void Function(CheckerboardCoordinate newChecker
 
 class CheckersMatch {
 
-  int currentPlayer = 1;
+  int currentPlayer = 2;
   int numberOfRows = 8;
   int numberOfColumns = 8;
   List<List<CheckerboardField>> checkerboard = [];
@@ -161,13 +161,9 @@ class CheckersMatch {
   void moveChecker(Checker checker, CheckerboardCoordinate newCheckerboardCoordinate) {
     getCheckerboardField(checker.coordinate).checker = Checker(0, false, CheckerboardCoordinate(-1, -1));
     getCheckerboardField(newCheckerboardCoordinate).checker = checker;
-    print("OLD POSITION");
-    print(checker.coordinate.row);
-    print(checker.coordinate.column);
+
     checker.coordinate = newCheckerboardCoordinate;
-    print("NEW POSITION");
-    print(checker.coordinate.row);
-    print(checker.coordinate.column);
+
   }
 
   void changePlayerTurn(){
@@ -528,6 +524,62 @@ class CheckersMatch {
       return 0;
     }
 
+    bool isMovingBackAllowed(Checker checker, int oldRow, int newRow) {
+        if(checker.player == 1)  {
+          //white moves
+          if(oldRow > newRow && !checker.isKing)
+            {
+              return false;
+            }
+        }
+        else {
+          //black moves
+          if(oldRow < newRow && !checker.isKing)
+          {
+            return false;
+          }
+        }
+        return true;
+    }
+
+    bool isJumpOnFieldAllowed(int oldRow, int oldColumn, int newRow, int newColumn) {
+      print("OLD: ROW $oldRow COLUMN $oldColumn");
+      print("NEW: ROW $newRow COLUMN $newColumn");
+
+      if (oldRow < newRow && oldColumn < newColumn) {
+        CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
+            oldRow + 1, oldColumn + 1);
+        print("case 1");
+        if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
+          return false;
+        }
+      }
+      else if (oldRow < newRow && oldColumn > newColumn) {
+        CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
+            oldRow + 1, oldColumn - 1);
+        print("case 2");
+        if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
+          return false;
+        }
+      }
+      else if (oldRow > newRow && oldColumn > newColumn) {
+        CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
+            oldRow - 1, oldColumn - 1);
+        print("case 3");
+        if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
+          return false;
+        }
+      }
+      else if (oldRow > newRow && oldColumn < newColumn) {
+        CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
+            oldRow - 1, oldColumn + 1);
+        print("case 4");
+        if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
+          return false;
+        }
+      }
+      return true;
+    }
 }
 
 

@@ -9,27 +9,6 @@ import 'screens/homepage.dart';
 
 void main() {
 
-  // CheckersMatch match = CheckersMatch();
-  //
-  // match.printCheckers();
-  //
-  // print("-----------------------");
-  // Checker checker = Checker(1, false, CheckerboardCoordinate(1, 0));
-  // Checker checker2 = Checker(2, false, CheckerboardCoordinate(7, 6));
-  // match.moveChecker(checker, CheckerboardCoordinate(2,1));
-  // match.printCheckers();
-  //
-  // print("-----------------------");
-  // match.moveChecker(checker2, CheckerboardCoordinate(3,2));
-  // match.printCheckers();
-
-
-  // match.containsOpponentChecker(CheckerboardCoordinate(0,1));
-  // print("-----------------------");
-  // match.containsChecker(CheckerboardCoordinate(3, 2));
-  // match.containsChecker(CheckerboardCoordinate(4, 0));
-
-
   runApp(MaterialApp(
       routes: {
         '/': (context) => const Homepage(),
@@ -95,51 +74,21 @@ class _MyGamePageState extends State<MyGamePage> {
   Widget build(BuildContext context) {
     initScreenSize(context);
 
-    var winner = "-";
-    if(gameTable.checkWinner() == 1) {
-      winner = "Black";
-    } else if(gameTable.checkWinner() == 2) {
-      winner = "White";
-    }
-
-
-    Widget alertWidget = gameTable.checkWinner() != 0 ? AlertDialog(
-      content: Text(
-      "Congratulations!\n\n\WINNER: $winner", style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.center,) ,
-      backgroundColor: const Color(0xFF2C2623),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => const MyApp()),
-            );
-          },
-          child: const Text("OK", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-        ),
-      ],
-    ) : const SizedBox( width: 1.0, height: 1.0);
-
-
     return Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: widget.colorAppBar,
-        //   centerTitle: true,
-        //   title: Text(widget.title.toUpperCase()),
-        //   elevation: 0,
-        // ),
+
         body: Container(color: widget.colorBackgroundGame, child:
         Column(children: <Widget>[
+          const SizedBox(width: 100, height: 50),
           Expanded(
               child: Center(
                 child: buildGameTable(),
               )),
+          buildWinnerWidget(),
+          const SizedBox(width: 100, height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[buildCurrentPlayerTurn()],),
-          const SizedBox(width: 100, height: 50),
-            alertWidget,
-          const SizedBox(width: 100, height: 20),
 
+          const SizedBox(width: 100, height: 100),
         ]))
     );
   }
@@ -226,7 +175,6 @@ class _MyGamePageState extends State<MyGamePage> {
             data: men,
             onDragStarted: () {
               setState(() {
-
                 gameTable.highlightPossibleMoves(men, type: modeWalking);
               });
             },
@@ -254,7 +202,25 @@ class _MyGamePageState extends State<MyGamePage> {
               // blockTable.isHighlighted || blockTable.isHighlightedAfterCapturing;
           },
           onAccept: (men) {
-            print("onAccept");
+
+
+            int oldRow = men.coordinate.row;
+            int oldColumn = men.coordinate.column;
+
+            int newRow = coordinate.row;
+            int newColumn = coordinate.column;
+
+
+            int diffRow = (oldRow-newRow).abs();
+            int diffColumn = (oldColumn - newColumn).abs();
+
+
+            bool canMove = true;
+            if(diffRow > 1 || diffColumn > 1) {
+              canMove = gameTable.isJumpOnFieldAllowed(oldRow, oldColumn, newRow, newColumn);
+            }
+
+            if(diffRow <= 2 && diffColumn <=2 && oldRow != newRow && oldColumn != newColumn && canMove && gameTable.isMovingBackAllowed(men, oldRow, newRow)) {
             setState(() {
               gameTable.moveChecker(men, CheckerboardCoordinate.change(coordinate));
               gameTable.canCapture(coordinate);
@@ -270,7 +236,7 @@ class _MyGamePageState extends State<MyGamePage> {
                 gameTable.changePlayerTurn();
               }
             });
-          });
+          }});
     }
 
     return buildBlockTableContainer(colorBackground, menWidget);
@@ -287,16 +253,82 @@ class _MyGamePageState extends State<MyGamePage> {
   }
 
   Widget buildCurrentPlayerTurn() {
-    return Card(
-      color: Colors.deepPurple,
-      child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Text("Current turn".toUpperCase(),
-                style: const TextStyle(fontSize: 20, color: Colors.white)),
-            Padding(padding: const EdgeInsets.all(20),
-                child: buildMenWidget(player: gameTable.currentPlayer, size: blockSize))
-          ]),
+
+    return SizedBox(
+      width: 410,
+      height: 110,
+      child: Card(
+        color: const Color.fromRGBO(254, 246, 218, 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        elevation: 1,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          const Text(
+          "CURRENT TURN     ",
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 30,
+              fontWeight: FontWeight.bold),
+        ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color:  const Color(0xff9d7760)
+            ),
+            child: Padding(padding: const EdgeInsets.all(10),
+                child: buildMenWidget(player: gameTable.currentPlayer, size: blockSize)),
+          )
+        ])
+      ),
     );
+  }
+
+  buildWinnerWidget() {
+    var winner = "-";
+    if(gameTable.checkWinner() == 1) {
+      winner = "White";
+    } else if(gameTable.checkWinner() == 2) {
+      winner = "Black";
+    }
+
+    // winner = winner.toUpperCase();
+
+    return gameTable.checkWinner() != 0 ? Card(
+        color: const Color(0xff9d7760),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        elevation: 1,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+           Text(
+            "WINNER: $winner ",
+            style: const TextStyle(
+                color: Colors.black,
+                fontSize: 25,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 40, height: 75),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(150),
+                color:  const Color.fromRGBO(254, 246, 218, 1)
+            ),
+            child: Padding(padding: const EdgeInsets.all(3),
+                child: TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (BuildContext context) => const MyApp()),
+                            );
+                          },
+                          child: const Text("Play again", style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)),)
+          )
+        )])
+    ) : const SizedBox( width: 1.0, height: 1.0);
+
   }
 
   buildMenWidget({int player = 1, bool isKing = false, double size = 32}) {
@@ -307,9 +339,9 @@ class _MyGamePageState extends State<MyGamePage> {
               boxShadow: [BoxShadow(
                   color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
               ],
-              color: player == 1 ? Colors.black54 : Colors.grey[100]),
+              color: player == 2 ? Colors.black54 : Colors.grey[100]),
           child: Icon(Icons.star,
-              color: player == 1 ? Colors.grey[100]?.withOpacity(0.5) : Colors
+              color: player == 2 ? Colors.grey[100]?.withOpacity(0.5) : Colors
                   .black54.withOpacity(0.5),
               size: size - (size * 0.1)));
     }
@@ -320,7 +352,7 @@ class _MyGamePageState extends State<MyGamePage> {
             boxShadow: [BoxShadow(
                 color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
             ],
-            color: player == 1 ? Colors.black54 : Colors.grey[100]));
+            color: player == 2 ? Colors.black54 : Colors.grey[100]));
   }
 
 

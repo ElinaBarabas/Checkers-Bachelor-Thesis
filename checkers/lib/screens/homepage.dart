@@ -115,7 +115,7 @@ class _HomepageState extends State<Homepage> {
         Card(
         color: const Color.fromRGBO(254, 246, 218, 1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(20),
         ),
         elevation: 4,
         child: Padding(
