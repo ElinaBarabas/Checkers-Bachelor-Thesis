@@ -35,9 +35,7 @@ class _HomepageState extends State<Homepage> {
                 height: 10,
               ),
 
-              const SizedBox(
-                height: 30,
-              ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
@@ -83,7 +81,7 @@ class _HomepageState extends State<Homepage> {
                     "Checkers",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 40,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold
                     ),
                   ),
@@ -91,7 +89,7 @@ class _HomepageState extends State<Homepage> {
                     "from photo to playing",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 20,
                         ),
                   ),
                 ],

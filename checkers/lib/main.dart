@@ -84,7 +84,7 @@ class _MyGamePageState extends State<MyGamePage> {
                 child: buildGameTable(),
               )),
           buildWinnerWidget(),
-          const SizedBox(width: 100, height: 40),
+          const SizedBox(width: 100, height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[buildCurrentPlayerTurn()],),
 
@@ -131,7 +131,7 @@ class _MyGamePageState extends State<MyGamePage> {
       color: Color(0xffecd7ce),
       child: Padding(
         padding: const EdgeInsets.all(3.0),
-        child: Container(padding: const EdgeInsets.all(4),
+        child: Container(padding: const EdgeInsets.all(2),
             color: widget.colorBorderTable,
             child: Column(mainAxisSize: MainAxisSize.min,
                 children: listCol)),
@@ -164,7 +164,7 @@ class _MyGamePageState extends State<MyGamePage> {
           .checker;
 
       menWidget =
-          Center(child: buildMenWidget(player: men.player, isKing: men.isKing, size: blockSize - 7));
+          Center(child: buildMenWidget(player: men.player, isKing: men.isKing, size: blockSize - 1));
 
       if (men.player == gameTable.currentPlayer) {
 
@@ -255,8 +255,8 @@ class _MyGamePageState extends State<MyGamePage> {
   Widget buildCurrentPlayerTurn() {
 
     return SizedBox(
-      width: 410,
-      height: 110,
+      width: 360,
+      height: 70,
       child: Card(
         color: const Color.fromRGBO(254, 246, 218, 1),
         shape: RoundedRectangleBorder(
@@ -269,7 +269,7 @@ class _MyGamePageState extends State<MyGamePage> {
           "CURRENT TURN     ",
           style: TextStyle(
               color: Colors.black,
-              fontSize: 30,
+              fontSize: 20,
               fontWeight: FontWeight.bold),
         ),
           Container(
@@ -296,6 +296,7 @@ class _MyGamePageState extends State<MyGamePage> {
     // winner = winner.toUpperCase();
 
     return gameTable.checkWinner() != 0 ? Card(
+
         color: const Color(0xff9d7760),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -307,10 +308,10 @@ class _MyGamePageState extends State<MyGamePage> {
             "WINNER: $winner ",
             style: const TextStyle(
                 color: Colors.black,
-                fontSize: 25,
+                fontSize: 20,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 40, height: 75),
+          SizedBox(width: 10, height: 75),
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(150),
@@ -324,7 +325,7 @@ class _MyGamePageState extends State<MyGamePage> {
                               MaterialPageRoute(builder: (BuildContext context) => const MyApp()),
                             );
                           },
-                          child: const Text("Play again", style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold)),)
+                          child: const Text("Play again", style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold)),)
           )
         )])
     ) : const SizedBox( width: 1.0, height: 1.0);
@@ -336,11 +337,11 @@ class _MyGamePageState extends State<MyGamePage> {
       return Container(width: size, height: size,
           decoration: BoxDecoration(
               shape: BoxShape.circle,
-              boxShadow: [BoxShadow(
+              boxShadow: const [BoxShadow(
                   color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
               ],
               color: player == 2 ? Colors.black54 : Colors.grey[100]),
-          child: Icon(Icons.star,
+          child: ImageIcon( const AssetImage("assets/images/king1.png"),
               color: player == 2 ? Colors.grey[100]?.withOpacity(0.5) : Colors
                   .black54.withOpacity(0.5),
               size: size - (size * 0.1)));
@@ -349,7 +350,7 @@ class _MyGamePageState extends State<MyGamePage> {
     return Container(width: size, height: size,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            boxShadow: [BoxShadow(
+            boxShadow: const [BoxShadow(
                 color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
             ],
             color: player == 2 ? Colors.black54 : Colors.grey[100]));
