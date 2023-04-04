@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:checkers/checkerboard_field.dart';
 import 'package:checkers/screens/rules.dart';
+import 'package:checkers/screens/scan.dart';
 import 'package:flutter/material.dart';
 
 import 'checker.dart';
@@ -7,12 +9,23 @@ import 'checkerboard_coordinate.dart';
 import 'checkers_match.dart';
 import 'screens/homepage.dart';
 
-void main() {
+Future<void> main() async {
+
+  // Ensure that plugin services are initialized so that `availableCameras()`
+// can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+// Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+// Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
+
 
   runApp(MaterialApp(
       routes: {
         '/': (context) => const Homepage(),
-        '/scan': (context) => const Rules(),
+        '/scan': (context) => Scan(camera: firstCamera),
         '/play': (context) => const MyApp(),
         '/rules': (context) => const Rules(),
       }
@@ -55,6 +68,7 @@ class MyGamePage extends StatefulWidget {
 }
 
 class _MyGamePageState extends State<MyGamePage> {
+
 
   CheckersMatch gameTable = CheckersMatch();
   int modeWalking = 1;
