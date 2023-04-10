@@ -274,7 +274,7 @@ class _MyGamePageState extends State<MyGamePage> {
       child: Card(
         color: const Color.fromRGBO(254, 246, 218, 1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(40),
         ),
         elevation: 1,
         child: Row(
@@ -313,7 +313,7 @@ class _MyGamePageState extends State<MyGamePage> {
 
         color: const Color(0xff9d7760),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(40),
         ),
         elevation: 1,
         child: Row(

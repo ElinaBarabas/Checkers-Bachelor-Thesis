@@ -12,6 +12,7 @@ def processImage(imageFile: Image):
     print(imageFile.filename)
     image = Image.open("./uploadedImages/" + imageFile.filename)
     image.show()
+    print("AICI")
     response = split_into_checkerboard_fields("./uploadedImages/" + imageFile.filename)
     classifyFields()
 
@@ -56,6 +57,8 @@ def split_into_checkerboard_fields(filename):
             field = checkerboard_image[y:y + field_height, x:x + field_width]
             first_row_fields.append(field)
 
+        print(len(first_row_fields))
+
         for i, f in enumerate(first_row_fields):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
@@ -82,6 +85,7 @@ def split_into_checkerboard_fields(filename):
         for i, f in enumerate(first_column_fields):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
+
                 cv2.imwrite(
                     os.path.join("../server/split/",
                                  f"{filename_without_extension}___r{i + 1}-c{0}.jpg"),

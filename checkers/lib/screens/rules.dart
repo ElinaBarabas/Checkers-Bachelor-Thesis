@@ -32,7 +32,7 @@ class _RulesState extends State<Rules> {
                       Card(
                         color: const Color.fromRGBO(254, 246, 218, 1),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(40.0),
                         ),
                         elevation: 4,
                         child: Padding(
