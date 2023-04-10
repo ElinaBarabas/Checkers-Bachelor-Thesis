@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:checkers/screens/custom_play.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class Scan extends StatefulWidget {
@@ -203,7 +205,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
   const DisplayPictureScreen({super.key, required this.imagePath});
 
-  uploadImage() async {
+  uploadImage(BuildContext context) async {
     final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:5000/upload"));
     final headers = {"Content-type": "multipart/form-data"};
 
@@ -216,7 +218,10 @@ class DisplayPictureScreen extends StatelessWidget {
     http.Response res = await http.Response.fromStream(response);
     final resJson = jsonDecode(res.body);
     var message = resJson['message'];
-    print(message);
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomPlay(message: message)));
+
+
   }
 
 
@@ -236,7 +241,7 @@ class DisplayPictureScreen extends StatelessWidget {
             const SizedBox(height: 30.0),
           GestureDetector(
               onTap: ()  {
-                uploadImage();
+                uploadImage(context);
                 // var navigation = "/play";
                 // Navigator.of(context).pushNamed(navigation);
               },
@@ -286,3 +291,4 @@ class DisplayPictureScreen extends StatelessWidget {
     );
   }
 }
+

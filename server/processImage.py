@@ -12,9 +12,12 @@ def processImage(imageFile: Image):
     print(imageFile.filename)
     image = Image.open("./uploadedImages/" + imageFile.filename)
     image.show()
-    print("AICI")
-    response = split_into_checkerboard_fields("./uploadedImages/" + imageFile.filename)
-    classifyFields()
+    isDetected = split_into_checkerboard_fields("./uploadedImages/" + imageFile.filename)
+    print(isDetected)
+    if isDetected == "FOUND":
+        response = classifyFields()
+    else:
+        response = "NOT FOUND"
 
     return response
 
@@ -32,7 +35,6 @@ def split_into_checkerboard_fields(filename):
     found, corners = cv2.findChessboardCorners(checkerboard_image, pattern_size)
 
     if found:
-        print("MERGE")
         response = "FOUND"
 
         rows, cols = pattern_size
@@ -120,7 +122,6 @@ def split_into_checkerboard_fields(filename):
                 break
 
     else:
-        print("CHIAR NU MERGE")
         response = "NOT found"
 
     return response

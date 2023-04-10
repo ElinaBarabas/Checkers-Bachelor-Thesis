@@ -59,8 +59,11 @@ def classifyFields():
 
         result_matrix[int(row)][int(column)] = piece_label
 
-    for elem in result_matrix:
-        print(elem)
+    resultString = ""
+    for i in range(0,8):
+        for j in range(0,8):
+            resultString += result_matrix[i][j]
 
+    return resultString
     # shutil.rmtree("split//")
     # os.mkdir("split")

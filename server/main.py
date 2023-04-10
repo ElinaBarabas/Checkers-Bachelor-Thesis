@@ -15,6 +15,7 @@ def upload():
         imageFile.save("./uploadedImages/" + filename)
 
         response = processImage(imageFile)
+        print(response)
 
         return jsonify({
             "message": f"{response}"
