@@ -7,8 +7,12 @@ import '../checkerboard_field.dart';
 import '../checkers_match.dart';
 
 class Play extends StatelessWidget {
-  const Play({super.key});
+  const Play({super.key,
+  required this.custom,
+  required this.responseMatrix});
 
+  final bool custom;
+  final List<List<String>> responseMatrix;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +20,7 @@ class Play extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PlayOfflinePage(title: 'Checkers Game', key: key),
+      home: PlayOfflinePage(title: 'Checkers Game', key: key, responseMatrix: responseMatrix, custom: custom),
     );
   }
 }
@@ -31,30 +35,68 @@ class PlayOfflinePage extends StatefulWidget {
   final Color colorBackgroundHighlight = Colors.blue;
   final Color colorBackgroundHighlightAfterKilling = Colors.deepPurple;
 
-  PlayOfflinePage({required Key? key, required this.title}) : super(key: key);
+  PlayOfflinePage({required Key? key, required this.title, required this.custom,
+    required this.responseMatrix }) : super(key: key);
+
+  final bool custom;
+  final List<List<String>> responseMatrix;
 
   final String title;
 
   @override
-  _PlayOfflinePageState createState() => _PlayOfflinePageState();
+  _PlayOfflinePageState createState() => _PlayOfflinePageState(custom, responseMatrix);
 }
 
 class _PlayOfflinePageState extends State<PlayOfflinePage> {
 
+  late final bool custom;
+  late final List<List<String>> responseMatrix;
 
   CheckersMatch gameTable = CheckersMatch();
   int modeWalking = 1;
   double blockSize = 1;
 
+  _PlayOfflinePageState(this.custom, this.responseMatrix);
+
   @override
   void initState() {
-    initGame();
-    super.initState();
+
+    if(custom == false) {
+      initGame();
+      super.initState();
+    }
+    else {
+      for(int i=0; i < gameTable.numberOfRows; i++)
+        {
+          for(int j=0; j < gameTable.numberOfColumns; j++)
+            {
+              if(responseMatrix[i][j] == 'W')
+                {
+                  CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(i, j);
+                  gameTable.addChecker(checkerboardCoordinate, 1);
+                }
+              if(responseMatrix[i][j] == 'B')
+              {
+                CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(i, j);
+                gameTable.addChecker(checkerboardCoordinate, 2);
+              }
+            }
+        }
+    }
+
   }
 
   void initGame() {
     gameTable.placeInitialCheckers();
+    // print(gameTable.getCheckerboard()[0][0].checker);
+    // print(gameTable.getCheckerboard()[0][0].row);
+    // print(gameTable.getCheckerboard()[0][0].column);
+    // print(gameTable.getCheckerboard()[0][0].canCaptureAgain);
+    // print(gameTable.getCheckerboard()[0][0].capturedChecker);
+    // print(gameTable.getCheckerboard()[0][0].isHighlightedAfterCapturing);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +353,7 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => const Play()),
+                            builder: (BuildContext context) => const Play(custom: false, responseMatrix: [[]],)),
                       );
                     },
                     child: const Text("Play again", style: TextStyle(

@@ -27,7 +27,7 @@ Future<void> main() async {
       routes: {
         '/': (context) => const Homepage(),
         '/scan': (context) => Scan(camera: firstCamera),
-        '/play': (context) => const Play(),
+        '/play': (context) => const Play(custom: false, responseMatrix: [[]]),
         '/rules': (context) => const Rules(),
       }
   ));

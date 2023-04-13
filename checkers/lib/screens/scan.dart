@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:checkers/screens/custom_play.dart';
+import 'package:checkers/screens/play.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -219,7 +219,10 @@ class DisplayPictureScreen extends StatelessWidget {
     final resJson = jsonDecode(res.body);
     var message = resJson['message'];
 
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomPlay(message: message)));
+    print("type of:" + message);
+    List<List<String>> responseMatrix = processResponse(message);
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Play(custom: true, responseMatrix: responseMatrix)));
 
 
   }
@@ -289,6 +292,26 @@ class DisplayPictureScreen extends StatelessWidget {
         ),
       )
     );
+  }
+
+  List<List<String>> processResponse(String response) {
+
+    List<String> charList = response.split('');
+
+    // Create an empty 8x8 matrix
+    List<List<String>> matrix = List.generate(8, (_) => List.filled(8, ''));
+
+    // Fill the matrix with characters from the list
+    for (int i = 0; i < charList.length; i++) {
+      int row = i ~/ 8;
+      int col = i % 8;
+      matrix[row][col] = charList[i];
+    }
+
+    // Print the resulting matrix
+    print(matrix);
+
+    return matrix;
   }
 }
 

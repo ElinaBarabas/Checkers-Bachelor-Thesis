@@ -580,6 +580,10 @@ class CheckersMatch {
       }
       return true;
     }
+
+  List<List<CheckerboardField>> getCheckerboard() {
+    return checkerboard;
+  }
 }
 
 
