@@ -9,19 +9,26 @@ from classifyFields import classifyFields
 
 def processImage(imageFile: Image):
 
-    print(imageFile.filename)
     image = Image.open("./uploadedImages/" + imageFile.filename)
     image.show()
-    isDetected = split_into_checkerboard_fields("./uploadedImages/" + imageFile.filename)
-    print(isDetected)
+
+    filename = imageFile.filename
+    filename = filename.split(".")[0]
+
+    newPath = "./" + filename
+    if not os.path.exists(newPath):
+        os.makedirs(newPath)
+
+    isDetected = split_into_checkerboard_fields("./uploadedImages/" + imageFile.filename, newPath)
     if isDetected == "FOUND":
-        response = classifyFields()
+        print("i'm here")
+        response = classifyFields(newPath)
     else:
         response = "NOT FOUND"
 
     return response
 
-def split_into_checkerboard_fields(filename):
+def split_into_checkerboard_fields(filename, newPath):
     checkerboard_image = cv2.imread(filename)
 
     filename = filename.split("//")[-1]
@@ -35,6 +42,8 @@ def split_into_checkerboard_fields(filename):
     found, corners = cv2.findChessboardCorners(checkerboard_image, pattern_size)
 
     if found:
+        print("HERE IS FOUND")
+
         response = "FOUND"
 
         rows, cols = pattern_size
@@ -65,7 +74,7 @@ def split_into_checkerboard_fields(filename):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
                 cv2.imwrite(
-                    os.path.join("../server/split/",
+                    os.path.join(f"../server/{newPath}/",
                                  f"{filename_without_extension}___r{0}-c{i}.jpg"),
                     f)
         # --------------------------------------------------------------------------------------------------------------
@@ -89,7 +98,7 @@ def split_into_checkerboard_fields(filename):
             if shape[0] > 0 and shape[1] > 0:
 
                 cv2.imwrite(
-                    os.path.join("../server/split/",
+                    os.path.join(f"../server/{newPath}/",
                                  f"{filename_without_extension}___r{i + 1}-c{0}.jpg"),
                     f)
         # --------------------------------------------------------------------------------------------------------------
@@ -109,7 +118,7 @@ def split_into_checkerboard_fields(filename):
             if shape[0] > 0 and shape[1] > 0:
                 # Generate the filename using the current row and column numbers
                 filename = f"{filename_without_extension}___r{row}-c{column}.jpg"
-                cv2.imwrite(os.path.join("../server/split/", filename), f)
+                cv2.imwrite(os.path.join(f"../server/{newPath}/", filename), f)
 
             # Increment the column number and wrap around at column 7
             row += 1
@@ -122,6 +131,8 @@ def split_into_checkerboard_fields(filename):
                 break
 
     else:
+        print("HERE IS NOT FOUND")
+
         response = "NOT found"
 
     return response

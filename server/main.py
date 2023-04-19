@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import werkzeug.utils
 from PIL import Image
 from flask import Flask, jsonify, request
@@ -5,6 +8,15 @@ from flask import Flask, jsonify, request
 from processImage import processImage
 
 app = Flask(__name__)
+
+
+def cleanMemory():
+    images = os.listdir("./uploadedImages")
+    for elem in images:
+        filenameWithoutExtension = elem.split(".")[0]
+        if os.path.exists(f"./{filenameWithoutExtension}"):
+            shutil.rmtree(f"./{filenameWithoutExtension}")
+        os.remove(f"./uploadedImages/{elem}")
 
 
 @app.route('/upload', methods=["POST"])
@@ -15,7 +27,9 @@ def upload():
         imageFile.save("./uploadedImages/" + filename)
 
         response = processImage(imageFile)
-        print(response)
+        print("THE RESPONSE IS: " + response)
+
+        cleanMemory()
 
         return jsonify({
             "message": f"{response}"

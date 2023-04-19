@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:checkers/screens/play.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -137,13 +138,15 @@ class ScanState extends State<Scan> {
                             builder: (context) => DisplayPictureScreen(
                               // Pass the automatically generated path to
                               // the DisplayPictureScreen widget.
-                              imagePath: image.path,
+                              imagePath: image.path, isButtonVisible: false,
                             ),
                           ),
                         );
                       } catch (e) {
                         // If an error occurs, log the error to the console.
-                        print(e);
+                        if (kDebugMode) {
+                          print(e);
+                        }
                       }
                     },
                     child:
@@ -202,8 +205,9 @@ class ScanState extends State<Scan> {
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final bool isButtonVisible;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
 
   uploadImage(BuildContext context) async {
     final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:5000/upload"));
@@ -219,10 +223,15 @@ class DisplayPictureScreen extends StatelessWidget {
     final resJson = jsonDecode(res.body);
     var message = resJson['message'];
 
-    print("type of:" + message);
-    List<List<String>> responseMatrix = processResponse(message);
+    if(message == "NOT FOUND")
+      {
+        showAlertDialog(context);
+      }
+    else {
+      List<List<String>> responseMatrix = processResponse(message);
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Play(custom: true, responseMatrix: responseMatrix)));
+    }
 
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Play(custom: true, responseMatrix: responseMatrix)));
 
 
   }
@@ -230,6 +239,8 @@ class DisplayPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         backgroundColor: const Color(0xFF2C2623),
       // appBar: AppBar(backgroundColor: const Color(0xFF2C2623), title: const Text('Display the Picture')),
@@ -239,14 +250,26 @@ class DisplayPictureScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 30.0),
+            Visibility(
+              visible: isButtonVisible,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: ElevatedButton(
+                  style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      )) ,backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(254, 246, 218, 1))),
+                    onPressed: () => { Navigator.pop(context)},
+                    child: const Text("Retake picture", style: TextStyle(color: Colors.black))
+                ),
+              ),
+            ),
+            const SizedBox(height: 15.0),
             Image.file(File(imagePath)),
-            const SizedBox(height: 30.0),
+            const SizedBox(height: 15.0),
           GestureDetector(
               onTap: ()  {
                 uploadImage(context);
-                // var navigation = "/play";
-                // Navigator.of(context).pushNamed(navigation);
               },
               child:
               Card(
@@ -294,6 +317,47 @@ class DisplayPictureScreen extends StatelessWidget {
     );
   }
 
+  showAlertDialog(BuildContext context) {
+
+    Widget retakePictureButton = Padding(
+      padding: const EdgeInsets.only(right: 10.0, bottom: 5),
+      child: TextButton(
+        child: const Text("Retake picture", style: TextStyle(color: Color(0xFF2C2623), fontSize: 17, fontWeight: FontWeight.bold)),
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true)));
+        },
+      ),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40),
+      ),
+      backgroundColor: const Color.fromRGBO(254, 246, 218, 1),
+      content: const Padding(
+          padding: EdgeInsets.only(top: 25.0),
+          child: Text("No checkerboard could be detected!", textAlign: TextAlign.center, style: TextStyle(
+                color: Colors.black,
+                fontSize: 20)),
+      ),
+      actions: [
+        retakePictureButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   List<List<String>> processResponse(String response) {
 
     List<String> charList = response.split('');
@@ -309,7 +373,9 @@ class DisplayPictureScreen extends StatelessWidget {
     }
 
     // Print the resulting matrix
-    print(matrix);
+    if (kDebugMode) {
+      print(matrix);
+    }
 
     return matrix;
   }
