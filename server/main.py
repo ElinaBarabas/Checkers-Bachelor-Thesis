@@ -4,7 +4,7 @@ import shutil
 import werkzeug.utils
 # from PIL import Image
 from flask import Flask, jsonify, request
-
+from waitress import serve
 from processImage import processImage
 
 app = Flask(__name__)
@@ -36,5 +36,10 @@ def upload():
         })
 
 
-# # if __name__ == "__main__":
-# app.run(host="0.0.0.0")
+@app.route('/')
+def index():
+    return "Hello"
+
+
+if __name__ == "__main__":
+    serve(app, host="0.0.0.0", port=50100, threads=2)

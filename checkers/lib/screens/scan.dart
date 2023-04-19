@@ -210,8 +210,8 @@ class DisplayPictureScreen extends StatelessWidget {
   const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
 
   uploadImage(BuildContext context) async {
-    // final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:5000/upload"));    //ASTA E LOCAL
-    final request = http.MultipartRequest("POST", Uri.parse("http://10.201.156.168:5000/upload"));
+    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
+    // final request = http.MultipartRequest("POST", Uri.parse("http://localhost:50100/upload"));
     final headers = {"Content-type": "multipart/form-data"};
 
     var selectedImage = File(imagePath);
