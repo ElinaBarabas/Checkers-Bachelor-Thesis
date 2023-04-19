@@ -2,7 +2,7 @@ import os
 import shutil
 
 import werkzeug.utils
-from PIL import Image
+# from PIL import Image
 from flask import Flask, jsonify, request
 
 from processImage import processImage
