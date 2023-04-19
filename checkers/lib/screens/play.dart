@@ -82,18 +82,13 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
               }
             }
         }
+
     }
 
   }
 
   void initGame() {
     gameTable.placeInitialCheckers();
-    // print(gameTable.getCheckerboard()[0][0].checker);
-    // print(gameTable.getCheckerboard()[0][0].row);
-    // print(gameTable.getCheckerboard()[0][0].column);
-    // print(gameTable.getCheckerboard()[0][0].canCaptureAgain);
-    // print(gameTable.getCheckerboard()[0][0].capturedChecker);
-    // print(gameTable.getCheckerboard()[0][0].isHighlightedAfterCapturing);
   }
 
 
@@ -389,6 +384,5 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
             ],
             color: player == 2 ? Colors.black54 : Colors.grey[100]));
   }
-
 
 }
