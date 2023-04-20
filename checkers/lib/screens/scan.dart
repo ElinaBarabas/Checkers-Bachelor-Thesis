@@ -210,8 +210,8 @@ class DisplayPictureScreen extends StatelessWidget {
   const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
 
   uploadImage(BuildContext context) async {
-    // final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
-    final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
+    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
+    // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
     final headers = {"Content-type": "multipart/form-data"};
 
     var selectedImage = File(imagePath);
@@ -224,8 +224,6 @@ class DisplayPictureScreen extends StatelessWidget {
 
     http.Response res = await http.Response.fromStream(response);
 
-    print(res.body);
-    print("ASTA AR FI EROAREA");
     final resJson = jsonDecode(res.body);
 
     var message = resJson['message'];

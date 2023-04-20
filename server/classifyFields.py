@@ -16,10 +16,11 @@ def classifyFields(newPath):
     untested_fields = os.listdir(newPath)
 
     if len(untested_fields) == 0:
-        print("SPLIT IS NOT OK")
         resultString = "NOT FOUND"
 
     else:
+        resultString = "aici ramane"
+        print("FISIERE IN FOLDER " + str(len(untested_fields)))
 
         result_matrix = [['e' for _ in range(8)] for _ in range(8)]
 
@@ -29,9 +30,6 @@ def classifyFields(newPath):
             print("NUME", elem)
             row_field_coordinates = elem.split("-")[0]
             column_field_coordinates = elem.split("-")[1]
-
-            print(row_field_coordinates[-1])
-            print(column_field_coordinates[1])
 
             row = row_field_coordinates[-1]
             column = column_field_coordinates[1]

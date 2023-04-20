@@ -16,8 +16,6 @@ def upload():
 
         imageFile = request.files['image']
 
-        print("AICI AJUNGE")
-
         imageFile.save("./uploadedImages/" + "output.jpg")
         img = Image.open(imageFile.stream)
         response = processImage(img)

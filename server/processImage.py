@@ -71,8 +71,6 @@ def split_into_checkerboard_fields(filename, newPath):
             field = checkerboard_image[y:y + field_height, x:x + field_width]
             first_row_fields.append(field)
 
-        print(len(first_row_fields))
-
         for i, f in enumerate(first_row_fields):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
