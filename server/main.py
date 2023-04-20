@@ -2,7 +2,6 @@ import os
 import shutil
 
 import werkzeug.utils
-# from PIL import Image
 from PIL import Image
 from flask import Flask, jsonify, request
 from waitress import serve
@@ -26,6 +25,8 @@ def upload():
     if request.method == "POST":
         shutil.rmtree(f"./output")
         imageFile = request.files['image']
+
+        print("AICI AJUNGE")
         # filename = werkzeug.utils.secure_filename(imageFile.filename)
         imageFile.save("./uploadedImages/" + "output.jpg")
         img = Image.open(imageFile.stream)

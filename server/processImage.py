@@ -8,7 +8,6 @@ from classifyFields import classifyFields
 
 
 def processImage(imageFile: Image):
-
     image = Image.open("./uploadedImages/" + "output.jpg")
     image.show()
 
@@ -27,6 +26,7 @@ def processImage(imageFile: Image):
         response = "NOT FOUND"
 
     return response
+
 
 def split_into_checkerboard_fields(filename, newPath):
     checkerboard_image = cv2.imread(filename)
@@ -96,7 +96,6 @@ def split_into_checkerboard_fields(filename, newPath):
         for i, f in enumerate(first_column_fields):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
-
                 cv2.imwrite(
                     os.path.join(f"../server/{newPath}/",
                                  f"{filename_without_extension}___r{i + 1}-c{0}.jpg"),
@@ -136,5 +135,3 @@ def split_into_checkerboard_fields(filename, newPath):
         response = "NOT found"
 
     return response
-
-

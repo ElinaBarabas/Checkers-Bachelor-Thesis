@@ -16,6 +16,7 @@ def classifyFields(newPath):
     untested_fields = os.listdir(newPath)
 
     if len(untested_fields) == 0:
+        print("SPLIT IS NOT OK")
         resultString = "NOT FOUND"
 
     else:
