@@ -3,6 +3,7 @@ import shutil
 
 import werkzeug.utils
 # from PIL import Image
+from PIL import Image
 from flask import Flask, jsonify, request
 from waitress import serve
 from processImage import processImage
@@ -27,8 +28,8 @@ def upload():
         imageFile = request.files['image']
         # filename = werkzeug.utils.secure_filename(imageFile.filename)
         imageFile.save("./uploadedImages/" + "output.jpg")
-
-        response = processImage(imageFile)
+        img = Image.open(imageFile.stream)
+        response = processImage(img)
         print("THE RESPONSE IS: " + response)
 
         cleanMemory()
