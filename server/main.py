@@ -7,7 +7,15 @@ from flask import Flask, jsonify, request
 from waitress import serve
 from processImage import processImage
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 app = Flask(__name__)
+
+limiter = Limiter(
+    app,
+    default_limits=["100 per day", "50 per hour"],
+)
 
 
 @app.route('/upload', methods=["POST"])

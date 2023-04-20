@@ -220,7 +220,7 @@ class DisplayPictureScreen extends StatelessWidget {
         selectedImage.lengthSync(), filename: selectedImage.path.split("/").last));
 
     request.headers.addAll(headers);
-    final response = await request.send();
+    final response = await request.send().timeout(const Duration(seconds: 100));
 
     http.Response res = await http.Response.fromStream(response);
 
