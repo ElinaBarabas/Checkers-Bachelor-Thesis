@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path/path.dart';
 
 // A screen that allows users to take a picture using a given camera.
@@ -236,11 +237,13 @@ class DisplayPictureScreen extends StatelessWidget {
       List<List<String>> responseMatrix = processResponse(message);
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => Play(custom: true, responseMatrix: responseMatrix)));
     }
-
-
-
   }
 
+  Future<void> saveImage() async{
+      print("pressed");
+      await GallerySaver.saveImage(imagePath);
+      print("saved");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -255,19 +258,53 @@ class DisplayPictureScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Visibility(
-              visible: isButtonVisible,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: ElevatedButton(
-                  style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      )) ,backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(254, 246, 218, 1))),
-                    onPressed: () => { Navigator.pop(context)},
-                    child: const Text("Retake picture", style: TextStyle(color: Colors.black))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          )
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color.fromRGBO(254, 246, 218, 1),
+                      ),
+                    ),
+                    onPressed: () => {saveImage()},
+                    child: const Text(
+                      "Save picture",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
                 ),
-              ),
+                Visibility(
+                  visible: isButtonVisible,
+                  child: Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color.fromRGBO(254, 246, 218, 1),
+                        ),
+                      ),
+                      onPressed: () => { Navigator.pop(context)},
+                      child: const Text(
+                        "Retake picture",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 15.0),
             Image.file(File(imagePath)),
@@ -315,8 +352,9 @@ class DisplayPictureScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              ))
-          ]
+              )),
+            const SizedBox(height: 15.0),
+            ]
         ),
       )
     );
