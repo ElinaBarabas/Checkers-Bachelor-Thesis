@@ -36,7 +36,7 @@ dependencies:
   path:
   flutter_easyloading:
   gallery_saver:
-
+  image_picker:
   http:
 
 

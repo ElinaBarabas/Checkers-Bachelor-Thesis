@@ -3,6 +3,7 @@ import 'package:checkers/checkerboard_field.dart';
 import 'package:checkers/screens/play.dart';
 import 'package:checkers/screens/rules.dart';
 import 'package:checkers/screens/scan.dart';
+import 'package:checkers/screens/select_image_source.dart';
 import 'package:flutter/material.dart';
 
 import 'checker.dart';
@@ -26,7 +27,9 @@ Future<void> main() async {
   runApp(MaterialApp(
       routes: {
         '/': (context) => const Homepage(),
-        '/scan': (context) => Scan(camera: firstCamera),
+        // '/scan': (context) => Scan(camera: firstCamera),
+        '/scan': (context) => const SelectImageSource(),
+        '/camera': (context) => Scan(camera: firstCamera),
         '/play': (context) => const Play(custom: false, responseMatrix: [[]]),
         '/rules': (context) => const Rules(),
       }

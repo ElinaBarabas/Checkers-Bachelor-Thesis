@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../checker.dart';
 import '../checkerboard_coordinate.dart';
 import '../checkerboard_field.dart';
 import '../checkers_match.dart';
+import 'homepage.dart';
 
 class Play extends StatelessWidget {
   const Play({super.key,
@@ -101,17 +103,17 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
 
         body: Container(color: widget.colorBackgroundGame, child:
         Column(children: <Widget>[
-          const SizedBox(width: 100, height: 50),
+          const SizedBox(width: 100, height: 30),
           Expanded(
               child: Center(
                 child: buildGameTable(),
               )),
           buildWinnerWidget(),
-          const SizedBox(width: 100, height: 10),
+          const SizedBox(width: 100),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerTurn()],),
 
-          const SizedBox(width: 100, height: 100),
+          const SizedBox(width: 100, height: 50),
         ]))
     );
   }

@@ -28,6 +28,15 @@ class _RulesState extends State<Rules> {
         body: SingleChildScrollView(
           child: Column(
                 children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 300),
+                        child: IconButton(
+                          icon: Image.asset('assets/images/back.png'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
                       _headerView(),
                       Card(
                         color: const Color.fromRGBO(254, 246, 218, 1),
@@ -133,7 +142,7 @@ class _RulesState extends State<Rules> {
 
   Widget _headerView() {
     return Padding(
-      padding: const EdgeInsets.only(left: 35.0, right: 40.0, top: 40.0, bottom: 10.0),
+      padding: const EdgeInsets.only(left: 35.0, right: 40.0, bottom: 30.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
