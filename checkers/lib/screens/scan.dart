@@ -211,7 +211,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
   uploadImage(BuildContext context) async {
     final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
-    // final request = http.MultipartRequest("POST", Uri.parse("http://localhost:50100/upload"));
+    // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
     final headers = {"Content-type": "multipart/form-data"};
 
     var selectedImage = File(imagePath);
@@ -222,6 +222,7 @@ class DisplayPictureScreen extends StatelessWidget {
     final response = await request.send();
     http.Response res = await http.Response.fromStream(response);
     final resJson = jsonDecode(res.body);
+
     var message = resJson['message'];
 
     if(message == "NOT FOUND")

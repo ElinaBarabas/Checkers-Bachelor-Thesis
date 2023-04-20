@@ -15,16 +15,18 @@ def cleanMemory():
     for elem in images:
         filenameWithoutExtension = elem.split(".")[0]
         if os.path.exists(f"./{filenameWithoutExtension}"):
-            shutil.rmtree(f"./{filenameWithoutExtension}")
-        os.remove(f"./uploadedImages/{elem}")
+            print("exists")
+            # shutil.rmtree(f"./{filenameWithoutExtension}")
+        # os.remove(f"./uploadedImages/{elem}")
 
 
 @app.route('/upload', methods=["POST"])
 def upload():
     if request.method == "POST":
+        shutil.rmtree(f"./output")
         imageFile = request.files['image']
-        filename = werkzeug.utils.secure_filename(imageFile.filename)
-        imageFile.save("./uploadedImages/" + filename)
+        # filename = werkzeug.utils.secure_filename(imageFile.filename)
+        imageFile.save("./uploadedImages/" + "output.jpg")
 
         response = processImage(imageFile)
         print("THE RESPONSE IS: " + response)

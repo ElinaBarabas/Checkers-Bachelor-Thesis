@@ -9,17 +9,17 @@ from classifyFields import classifyFields
 
 def processImage(imageFile: Image):
 
-    image = Image.open("./uploadedImages/" + imageFile.filename)
+    image = Image.open("./uploadedImages/" + "output.jpg")
     image.show()
 
-    filename = imageFile.filename
+    filename = "output.jpg"
     filename = filename.split(".")[0]
 
     newPath = "./" + filename
     if not os.path.exists(newPath):
         os.makedirs(newPath)
 
-    isDetected = split_into_checkerboard_fields("./uploadedImages/" + imageFile.filename, newPath)
+    isDetected = split_into_checkerboard_fields("./uploadedImages/" + "output.jpg", newPath)
     if isDetected == "FOUND":
         print("i'm here")
         response = classifyFields(newPath)
