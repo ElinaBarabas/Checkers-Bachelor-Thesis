@@ -8,8 +8,11 @@ from classifyFields import classifyFields
 
 
 def processImage(imageFile: Image):
-    image = Image.open("./uploadedImages/" + "output.jpg")
-    image.show()
+    # image = Image.open("./uploadedImages/" + "output.jpg")
+    # # image.show()
+
+    # file_path = "uploadedImages/output.jpg"
+    # os.startfile(file_path)
 
     filename = "output.jpg"
     filename = filename.split(".")[0]
