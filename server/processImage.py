@@ -8,9 +8,9 @@ from classifyFields import classifyFields
 
 
 def processImage(imageFile: Image):
-    # image = Image.open("./uploadedImages/" + "output.jpg")
+    image = Image.open("./uploadedImages/" + "output.jpg")
     # # image.show()
-
+    image.show()
     # file_path = "uploadedImages/output.jpg"
     # os.startfile(file_path)
 
@@ -32,6 +32,8 @@ def processImage(imageFile: Image):
 
 
 def split_into_checkerboard_fields(filename, newPath):
+
+    print(newPath + "IS HERE")
     checkerboard_image = cv2.imread(filename)
 
     filename = filename.split("//")[-1]

@@ -83,7 +83,7 @@ class ScanState extends State<Scan> {
                   ),
                 ),
                 Card(
-                  color: const Color.fromRGBO(254, 246, 218, 1),
+                  color: const Color.fromRGBO(255, 255, 255, 1.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40),
                   ),

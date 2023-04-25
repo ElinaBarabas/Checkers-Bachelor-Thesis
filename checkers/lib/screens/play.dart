@@ -22,12 +22,12 @@ class Play extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PlayOfflinePage(title: 'Checkers Game', key: key, responseMatrix: responseMatrix, custom: custom),
+      home: PlayPage(title: 'Checkers Game', key: key, responseMatrix: responseMatrix, custom: custom),
     );
   }
 }
 
-class PlayOfflinePage extends StatefulWidget {
+class PlayPage extends StatefulWidget {
 
   final Color whiteFields = Color.fromRGBO(254, 246, 218, 1);
   final Color blackFields = Color(0xff9d7760);
@@ -37,7 +37,7 @@ class PlayOfflinePage extends StatefulWidget {
   final Color colorBackgroundHighlight = Colors.blue;
   final Color colorBackgroundHighlightAfterKilling = Colors.deepPurple;
 
-  PlayOfflinePage({required Key? key, required this.title, required this.custom,
+  PlayPage({required Key? key, required this.title, required this.custom,
     required this.responseMatrix }) : super(key: key);
 
   final bool custom;
@@ -46,10 +46,10 @@ class PlayOfflinePage extends StatefulWidget {
   final String title;
 
   @override
-  _PlayOfflinePageState createState() => _PlayOfflinePageState(custom, responseMatrix);
+  _PlayPageState createState() => _PlayPageState(custom, responseMatrix);
 }
 
-class _PlayOfflinePageState extends State<PlayOfflinePage> {
+class _PlayPageState extends State<PlayPage> {
 
   late final bool custom;
   late final List<List<String>> responseMatrix;
@@ -57,8 +57,10 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
   CheckersMatch gameTable = CheckersMatch();
   int modeWalking = 1;
   double blockSize = 1;
+  bool isMatchStarted = false;
+  final List<bool> selectedPlayer= <bool>[true, false];
 
-  _PlayOfflinePageState(this.custom, this.responseMatrix);
+  _PlayPageState(this.custom, this.responseMatrix);
 
   @override
   void initState() {
@@ -68,6 +70,7 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
       super.initState();
     }
     else {
+
       for(int i=0; i < gameTable.numberOfRows; i++)
         {
           for(int j=0; j < gameTable.numberOfColumns; j++)
@@ -98,24 +101,100 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
   @override
   Widget build(BuildContext context) {
     initScreenSize(context);
-
     return Scaffold(
 
         body: Container(color: widget.colorBackgroundGame, child:
         Column(children: <Widget>[
           const SizedBox(width: 100, height: 30),
+          Visibility(
+            visible: (custom && !isMatchStarted),
+            child: Card(
+              color: const Color.fromRGBO(255, 255, 255, 1.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Image.asset(
+                        "assets/images/king1.png",
+                        scale: 2,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 25.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "Tap on checkers that were upgraded to kings before scanning the match!"
+                                    "\n\nSelect the player who will make the next move!",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ]),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
           Expanded(
               child: Center(
-                child: buildGameTable(),
+                child: buildGameTable(context),
               )),
-          buildWinnerWidget(),
+
+            buildWinnerWidget(),
           const SizedBox(width: 100),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerTurn()],),
 
-          const SizedBox(width: 100, height: 50),
+          const SizedBox(width: 100, height: 20),
+          buildSelectCurrentPlayer(),
+          const SizedBox(width: 100, height: 20),
+          buildStartMatchButton(),
+          const SizedBox(width: 100, height: 30)
         ]))
     );
+  }
+
+  Widget buildStartMatchButton() {
+
+    return Visibility(
+      visible: (custom && !isMatchStarted),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.all<Color>(
+            const Color(0xff9d7760),
+          ),
+        ),
+        onPressed: () => {startMatch()},
+        child: const Padding(
+          padding: EdgeInsets.all(13.0),
+          child: Text(
+            "Start match!",
+            style: TextStyle(color: Colors.black, fontSize: 18),
+          ),
+        ),
+      ),
+    );
+
   }
 
   void initScreenSize(BuildContext context) {
@@ -139,12 +218,12 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
     }
   }
 
-  buildGameTable() {
+  buildGameTable(BuildContext context) {
     List<Widget> listCol = [];
     for (int row = 0; row < gameTable.numberOfRows; row++) {
       List<Widget> listRow = [];
       for (int col = 0; col < gameTable.numberOfColumns; col++) {
-        listRow.add(buildBlockContainer(CheckerboardCoordinate(row, col)));
+        listRow.add(buildBlockContainer(CheckerboardCoordinate(row, col), context));
       }
 
       listCol.add(Row(mainAxisSize: MainAxisSize.min,
@@ -163,10 +242,9 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
     );
   }
 
-  Widget buildBlockContainer(CheckerboardCoordinate coordinate) {
+  Widget buildBlockContainer(CheckerboardCoordinate coordinate, BuildContext context) {
+
     CheckerboardField block = gameTable.getCheckerboardField(coordinate);
-
-
     Color colorBackground;
 
     if (block.isHighlighted) {
@@ -188,9 +266,18 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
           .getCheckerboardField(coordinate)
           .checker;
 
+
       menWidget =
-          Center(child: buildMenWidget(
-              player: men.player, isKing: men.isKing, size: blockSize - 1));
+          GestureDetector(
+            onTap: () {
+              if(!isMatchStarted && custom) {
+                men.checkerBecomesKing();
+              }
+              setState(() {});
+              },
+            child: Center(child: buildMenWidget(
+                player: men.player, isKing: men.isKing, size: blockSize - 1)),
+          );
 
       if (men.player == gameTable.currentPlayer) {
         menWidget = Draggable<Checker>(
@@ -247,6 +334,7 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
                 oldColumn != newColumn && canMove &&
                 gameTable.isMovingBackAllowed(men, oldRow, newRow)) {
               setState(() {
+
                 gameTable.moveChecker(
                     men, CheckerboardCoordinate.change(coordinate));
                 gameTable.canCapture(coordinate);
@@ -266,6 +354,7 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
           });
     }
 
+
     return buildBlockTableContainer(colorBackground, menWidget);
   }
 
@@ -280,34 +369,37 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
   }
 
   Widget buildCurrentPlayerTurn() {
-    return SizedBox(
-      width: 360,
-      height: 70,
-      child: Card(
-          color: const Color.fromRGBO(254, 246, 218, 1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          elevation: 1,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            const Text(
-              "CURRENT TURN     ",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+    return Visibility(
+      visible: (isMatchStarted || !custom),
+      child: SizedBox(
+        width: 360,
+        height: 70,
+        child: Card(
+            color: const Color.fromRGBO(254, 246, 218, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: const Color(0xff9d7760)
+            elevation: 1,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              const Text(
+                "CURRENT TURN     ",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
-              child: Padding(padding: const EdgeInsets.all(10),
-                  child: buildMenWidget(
-                      player: gameTable.currentPlayer, size: blockSize)),
-            )
-          ])
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: const Color(0xff9d7760)
+                ),
+                child: Padding(padding: const EdgeInsets.all(10),
+                    child: buildMenWidget(
+                        player: gameTable.currentPlayer, size: blockSize)),
+              )
+            ])
+        ),
       ),
     );
   }
@@ -322,7 +414,7 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
 
     // winner = winner.toUpperCase();
 
-    return gameTable.checkWinner() != 0 ? Card(
+    return (gameTable.checkWinner() != 0 && isMatchStarted) ? Card(
 
         color: const Color(0xff9d7760),
         shape: RoundedRectangleBorder(
@@ -338,7 +430,7 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 10, height: 75),
+          const SizedBox(width: 10, height: 75),
           Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(150),
@@ -386,5 +478,53 @@ class _PlayOfflinePageState extends State<PlayOfflinePage> {
             ],
             color: player == 2 ? Colors.black54 : Colors.grey[100]));
   }
+
+  void startMatch() {
+    isMatchStarted = true;
+    setState(() {
+    });
+  }
+
+  Widget buildSelectCurrentPlayer() {
+
+    const List<Widget> players = <Widget>[
+      Text('   Black   ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+      Text('   White   ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))
+    ];
+
+    return Visibility(
+      visible: (custom && !isMatchStarted),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(254, 246, 218, 1),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        child: ToggleButtons(
+          onPressed: (int index) {
+            setState(() {
+              // The button that is tapped is set to true, and the others to false.
+              for (int i = 0; i < selectedPlayer.length; i++) {
+                selectedPlayer[i] = i == index;
+
+                if(index == 0) {
+                  gameTable.currentPlayer = 2;
+                }
+                else {
+                  gameTable.currentPlayer = 1;
+                }
+              }
+            });
+          },
+          selectedBorderColor: Colors.white,
+          selectedColor:  Colors.grey,
+          fillColor:  Colors.black54,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          isSelected: selectedPlayer,
+          children: players,
+        ),
+      ),
+    );
+  }
+
 
 }

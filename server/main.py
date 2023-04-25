@@ -26,10 +26,12 @@ def upload():
 
         imageFile.save("./uploadedImages/" + "output.jpg")
         img = Image.open(imageFile.stream)
+        # img.show()
         response = processImage(img)
+        os.remove("uploadedImages/output.jpg")
         print("THE RESPONSE IS: " + response)
 
-        # cleanMemory()
+        shutil.rmtree("output")
 
         return jsonify({
             "message": f"{response}"
