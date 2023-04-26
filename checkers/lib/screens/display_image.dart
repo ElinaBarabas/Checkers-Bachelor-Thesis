@@ -124,8 +124,15 @@ class DisplayPictureScreen extends StatelessWidget {
                 Image.file(File(imagePath)),
                 const SizedBox(height: 15.0),
                 GestureDetector(
-                    onTap: ()  {
-                      uploadImage(context);
+                    onTap: ()  async {
+                      var activeConnection = await checkUserConnection();
+
+                      if(activeConnection == false) {
+                        showConnectionAlertDialog(context);
+                      }
+                      else {
+                        uploadImage(context);
+                      }
                     },
                     child:
                     Card(
@@ -235,5 +242,101 @@ class DisplayPictureScreen extends StatelessWidget {
     }
 
     return matrix;
+  }
+
+  Future<bool> checkUserConnection() async {
+
+    bool activeConnection = false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          activeConnection = true;
+        }
+    } on SocketException catch (_) {
+        activeConnection = false;
+    }
+
+    return activeConnection;
+  }
+
+  showConnectionAlertDialog(BuildContext context) {
+
+    Widget noInternetConnectionButton = TextButton(
+      child: const Text(
+        "OK",
+        style: TextStyle(
+          color: Color(0xFF2C2623),
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40),
+      ),
+      backgroundColor: const Color.fromRGBO(254, 246, 218, 1),
+      content:  Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: Container(
+          height: 70,
+          width: 300,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  "assets/images/no-wifi.png",
+                  scale: 4,
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "No internet connection!",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        "Please try again!",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        noInternetConnectionButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

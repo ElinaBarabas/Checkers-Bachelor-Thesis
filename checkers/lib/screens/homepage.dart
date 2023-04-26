@@ -13,6 +13,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
 
+  bool activeConnection = false;
 
   // @override
   @override
@@ -106,8 +107,8 @@ class _HomepageState extends State<Homepage> {
     return GestureDetector(
 
       onTap: ()  {
-        var navigation = "/${title.toLowerCase()}";
-        Navigator.of(context).pushNamed(navigation);
+          var navigation = "/${title.toLowerCase()}";
+          Navigator.of(context).pushNamed(navigation);
         },
       child:
         Card(
@@ -160,6 +161,5 @@ class _HomepageState extends State<Homepage> {
         ),
       ));
   }
-
 
 }

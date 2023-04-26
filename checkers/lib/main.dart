@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:checkers/checkerboard_field.dart';
 import 'package:checkers/screens/play.dart';
@@ -23,6 +25,19 @@ Future<void> main() async {
 // Get a specific camera from the list of available cameras.
   final firstCamera = cameras.first;
 
+  bool activeConnection = false;
+  Future checkUserConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        activeConnection = true;
+      }
+    } on SocketException catch (_) {
+      activeConnection = false;
+    };
+  }
+
+  checkUserConnection();
 
   runApp(MaterialApp(
       routes: {
@@ -34,6 +49,9 @@ Future<void> main() async {
         '/rules': (context) => const Rules(),
       }
   ));
+
+
+
 }
 
 // void main() => runApp(MyApp());

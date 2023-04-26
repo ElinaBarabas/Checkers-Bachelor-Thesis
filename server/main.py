@@ -21,7 +21,7 @@ limiter = Limiter(
 @app.route('/upload', methods=["POST"])
 def upload():
     if request.method == "POST":
-
+        shutil.rmtree("output")
         imageFile = request.files['image']
 
         imageFile.save("./uploadedImages/" + "output.jpg")
@@ -31,7 +31,7 @@ def upload():
         os.remove("uploadedImages/output.jpg")
         print("THE RESPONSE IS: " + response)
 
-        shutil.rmtree("output")
+
 
         return jsonify({
             "message": f"{response}"
