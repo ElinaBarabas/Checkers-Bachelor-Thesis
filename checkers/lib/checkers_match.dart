@@ -327,7 +327,6 @@ class CheckersMatch {
     if(!containsChecker(checkerboardCoordinate)) {      // first we check if the given coordinate contains a checker; if not, it means that the king can be moved directly there, without any capture
 
       if(typeOfWalking == 1) {
-        print("INTRA AICI BOSS");
         setHighlightSimpleMove(checkerboardCoordinate);
       }
 
@@ -481,14 +480,14 @@ class CheckersMatch {
 
     bool canCaptureMore(Checker checker, CheckerboardCoordinate checkerboardCoordinate) {
 
-        return false; //straightCheckers
-        // if(checker.isKing) {
-        //   coordinatesKingPath.clear();
-        //   return canKingMoveInAnyDirection(checker, 3);
-        // }
-        // else {
-        //   return getCheckerboardField(checkerboardCoordinate).canCaptureAgain;
-        // }
+        // return false; //straightCheckers
+        if(checker.isKing) {
+          coordinatesKingPath.clear();
+          return canKingMoveInAnyDirection(checker, 3);
+        }
+        else {
+          return getCheckerboardField(checkerboardCoordinate).canCaptureAgain;
+        }
     }
 
     int checkWinner() {

@@ -37,6 +37,7 @@ class PlayPage extends StatefulWidget {
   final Color colorBackgroundHighlight = Colors.blue;
   final Color colorBackgroundHighlightAfterKilling = Colors.deepPurple;
 
+
   PlayPage({required Key? key, required this.title, required this.custom,
     required this.responseMatrix }) : super(key: key);
 
@@ -58,11 +59,13 @@ class _PlayPageState extends State<PlayPage> {
   int modeWalking = 1;
   double blockSize = 1;
   bool isMatchStarted = false;
+  bool isMatchFinished = false;
   bool isCurrentPlayerWidget = true;
   bool isWinnerWidget = true;
   bool isTipWidget = true;
   int whitePieces = 0, blackPieces = 0;
   final List<bool> selectedPlayer= <bool>[true, false];
+
 
   _PlayPageState(this.custom, this.responseMatrix);
 
@@ -161,6 +164,7 @@ class _PlayPageState extends State<PlayPage> {
               ),
             ),
           ),
+          buildPlayingSuggestionWidget(),
           Expanded(
               child: Center(
                 child: buildGameTable(context),
@@ -171,6 +175,7 @@ class _PlayPageState extends State<PlayPage> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerTurn()],),
           buildEmptyBoardWidget(),
+
           const SizedBox(width: 100, height: 20),
           buildSelectCurrentPlayer(),
           const SizedBox(width: 100, height: 20),
@@ -269,6 +274,8 @@ class _PlayPageState extends State<PlayPage> {
         colorBackground = widget.whiteFields;
       }
     }
+
+
 
     Widget menWidget;
     if (block.checker.coordinate.row != -1 &&
@@ -594,4 +601,53 @@ class _PlayPageState extends State<PlayPage> {
       ),
     );
   }
+
+  buildPlayingSuggestionWidget() {
+
+
+    return Visibility(
+      visible: ((isMatchStarted || !custom) && gameTable.checkWinner() == 0),
+      child: Card(
+        color: const Color.fromRGBO(255, 255, 255, 1.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40),
+        ),
+        elevation: 3,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Image.asset(
+                  "assets/images/drag.png",
+                  scale: 2,
+                ),
+              ),
+              Expanded(
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "For making a move, you must drag a piece to the field on which you want to place it.",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ]),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }
