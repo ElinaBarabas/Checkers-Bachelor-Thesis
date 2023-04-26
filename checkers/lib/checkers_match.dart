@@ -300,9 +300,6 @@ class CheckersMatch {
           return canFirstPlayerMove(newChecker, type: 3);  // it returns if the checker of the first player can be moved to right
         });
 
-    print("HELLO");
-    print(canMoveToLeft);
-    print(canMoveToRight);
     return canMoveToLeft || canMoveToRight; // based on the returned values, we know if the checker of the first player can be moved in one/both direction(s) or in neither of them
   }
 
@@ -330,6 +327,7 @@ class CheckersMatch {
     if(!containsChecker(checkerboardCoordinate)) {      // first we check if the given coordinate contains a checker; if not, it means that the king can be moved directly there, without any capture
 
       if(typeOfWalking == 1) {
+        print("INTRA AICI BOSS");
         setHighlightSimpleMove(checkerboardCoordinate);
       }
 
@@ -457,9 +455,7 @@ class CheckersMatch {
             canKingMoveInAnyDirection(checker,type);
           }
           else {
-            print("HERE");
             canFirstPlayerMove(checker, type: type);
-            print("HERE");
           }
         }
         if(checker.player == 2) {
@@ -485,13 +481,14 @@ class CheckersMatch {
 
     bool canCaptureMore(Checker checker, CheckerboardCoordinate checkerboardCoordinate) {
 
-        if(checker.isKing) {
-          coordinatesKingPath.clear();
-          return canKingMoveInAnyDirection(checker, 3);
-        }
-        else {
-          return getCheckerboardField(checkerboardCoordinate).canCaptureAgain;
-        }
+        return false; //straightCheckers
+        // if(checker.isKing) {
+        //   coordinatesKingPath.clear();
+        //   return canKingMoveInAnyDirection(checker, 3);
+        // }
+        // else {
+        //   return getCheckerboardField(checkerboardCoordinate).canCaptureAgain;
+        // }
     }
 
     int checkWinner() {
@@ -543,13 +540,10 @@ class CheckersMatch {
     }
 
     bool isJumpOnFieldAllowed(int oldRow, int oldColumn, int newRow, int newColumn) {
-      print("OLD: ROW $oldRow COLUMN $oldColumn");
-      print("NEW: ROW $newRow COLUMN $newColumn");
 
       if (oldRow < newRow && oldColumn < newColumn) {
         CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
             oldRow + 1, oldColumn + 1);
-        print("case 1");
         if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
           return false;
         }
@@ -557,7 +551,6 @@ class CheckersMatch {
       else if (oldRow < newRow && oldColumn > newColumn) {
         CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
             oldRow + 1, oldColumn - 1);
-        print("case 2");
         if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
           return false;
         }
@@ -565,7 +558,7 @@ class CheckersMatch {
       else if (oldRow > newRow && oldColumn > newColumn) {
         CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
             oldRow - 1, oldColumn - 1);
-        print("case 3");
+
         if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
           return false;
         }
@@ -573,7 +566,6 @@ class CheckersMatch {
       else if (oldRow > newRow && oldColumn < newColumn) {
         CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(
             oldRow - 1, oldColumn + 1);
-        print("case 4");
         if (!containsChecker(checkerboardCoordinate) || (containsChecker(checkerboardCoordinate) && !containsOpponentChecker(checkerboardCoordinate))) {
           return false;
         }
@@ -584,6 +576,8 @@ class CheckersMatch {
   List<List<CheckerboardField>> getCheckerboard() {
     return checkerboard;
   }
+
+
 }
 
 

@@ -31,8 +31,6 @@ def upload():
         os.remove("uploadedImages/output.jpg")
         print("THE RESPONSE IS: " + response)
 
-
-
         return jsonify({
             "message": f"{response}"
         })

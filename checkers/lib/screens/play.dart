@@ -92,14 +92,13 @@ class _PlayPageState extends State<PlayPage> {
                 gameTable.addChecker(checkerboardCoordinate, 2);
               }
             }
-
-          if(whitePieces == 0 && blackPieces == 0)
-            {
-              isCurrentPlayerWidget = false;
-              isWinnerWidget = false;
-              isTipWidget = false;
-            }
         }
+      if(whitePieces == 0 && blackPieces == 0)
+      {
+        isCurrentPlayerWidget = false;
+        isWinnerWidget = false;
+        isTipWidget = false;
+      }
     }
 
   }
@@ -285,6 +284,10 @@ class _PlayPageState extends State<PlayPage> {
               if(!isMatchStarted && custom) {
                 men.checkerBecomesKing();
               }
+              else
+              {
+                print(men.isKing);
+              }
               setState(() {});
               },
             child: Center(child: buildMenWidget(
@@ -417,7 +420,7 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   buildWinnerWidget() {
-    print("Hei");
+
     var winner = "-";
     if (gameTable.checkWinner() == 1) {
       winner = "White";
