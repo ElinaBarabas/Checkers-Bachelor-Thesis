@@ -58,6 +58,9 @@ class _PlayPageState extends State<PlayPage> {
   int modeWalking = 1;
   double blockSize = 1;
   bool isMatchStarted = false;
+  bool isCurrentPlayerWidget = true;
+  bool isWinnerWidget = true;
+  int whitePieces = 0, blackPieces = 0;
   final List<bool> selectedPlayer= <bool>[true, false];
 
   _PlayPageState(this.custom, this.responseMatrix);
@@ -77,17 +80,24 @@ class _PlayPageState extends State<PlayPage> {
             {
               if(responseMatrix[i][j] == 'W')
                 {
+                  whitePieces += 1;
                   CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(i, j);
                   gameTable.addChecker(checkerboardCoordinate, 1);
                 }
               if(responseMatrix[i][j] == 'B')
               {
+                blackPieces += 1;
                 CheckerboardCoordinate checkerboardCoordinate = CheckerboardCoordinate(i, j);
                 gameTable.addChecker(checkerboardCoordinate, 2);
               }
             }
-        }
 
+          if(whitePieces == 0 && blackPieces == 0)
+            {
+              isCurrentPlayerWidget = false;
+              isWinnerWidget = false;
+            }
+        }
     }
 
   }
@@ -159,7 +169,7 @@ class _PlayPageState extends State<PlayPage> {
           const SizedBox(width: 100),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerTurn()],),
-
+          buildEmptyBoardWidget(),
           const SizedBox(width: 100, height: 20),
           buildSelectCurrentPlayer(),
           const SizedBox(width: 100, height: 20),
@@ -415,7 +425,7 @@ class _PlayPageState extends State<PlayPage> {
 
     // winner = winner.toUpperCase();
 
-    return (gameTable.checkWinner() != 0 && ((isMatchStarted && custom) || !custom)) ? Card(
+    return (gameTable.checkWinner() != 0 && isWinnerWidget && ((isMatchStarted && custom) || !custom)) ? Card(
 
         color: const Color(0xff9d7760),
         shape: RoundedRectangleBorder(
@@ -494,7 +504,7 @@ class _PlayPageState extends State<PlayPage> {
     ];
 
     return Visibility(
-      visible: (custom && !isMatchStarted),
+      visible: (custom && !isMatchStarted && isCurrentPlayerWidget),
       child: Container(
         decoration: const BoxDecoration(
           color: Color.fromRGBO(254, 246, 218, 1),
@@ -527,5 +537,56 @@ class _PlayPageState extends State<PlayPage> {
     );
   }
 
+  buildEmptyBoardWidget() {
 
+    var isEmpty = false;
+
+    if(whitePieces == 0 && blackPieces ==0 && custom){
+      isEmpty = true;
+      isMatchStarted = true;
+    }
+
+    return Visibility(
+      visible: isEmpty,
+      child: Card(
+          color: const Color(0xff9d7760),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          elevation: 1,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            const Text(
+              "Empty checkerboard!\n  There is no winner!",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 10, height: 75),
+            Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(150),
+                    color: const Color.fromRGBO(254, 246, 218, 1)
+                ),
+                child: Padding(padding: const EdgeInsets.all(3),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                              const Play(custom: false, responseMatrix: [[]],)),
+                        );
+                      },
+                      child: const Text("Play again", style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold)),)
+                )
+            )
+          ])
+      ),
+    );
+  }
 }
