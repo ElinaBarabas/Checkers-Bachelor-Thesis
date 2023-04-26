@@ -17,6 +17,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
   const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
 
+
   uploadImage(BuildContext context) async {
     final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
@@ -74,23 +75,26 @@ class DisplayPictureScreen extends StatelessWidget {
                           Navigator.pop(context);
                         },
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40),
-                              )
+                    Visibility(
+                      visible: !isButtonVisible,
+                      child: Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                )
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color.fromRGBO(254, 246, 218, 1),
+                            ),
                           ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromRGBO(254, 246, 218, 1),
+                          onPressed: () => {saveImage()},
+                          child: const Text(
+                            "Save picture",
+                            style: TextStyle(color: Colors.black),
                           ),
-                        ),
-                        onPressed: () => {saveImage()},
-                        child: const Text(
-                          "Save picture",
-                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),

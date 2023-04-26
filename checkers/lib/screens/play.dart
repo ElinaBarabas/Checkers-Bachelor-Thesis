@@ -60,6 +60,7 @@ class _PlayPageState extends State<PlayPage> {
   bool isMatchStarted = false;
   bool isCurrentPlayerWidget = true;
   bool isWinnerWidget = true;
+  bool isTipWidget = true;
   int whitePieces = 0, blackPieces = 0;
   final List<bool> selectedPlayer= <bool>[true, false];
 
@@ -96,6 +97,7 @@ class _PlayPageState extends State<PlayPage> {
             {
               isCurrentPlayerWidget = false;
               isWinnerWidget = false;
+              isTipWidget = false;
             }
         }
     }
@@ -117,7 +119,7 @@ class _PlayPageState extends State<PlayPage> {
         Column(children: <Widget>[
           const SizedBox(width: 100, height: 30),
           Visibility(
-            visible: (custom && !isMatchStarted),
+            visible: (custom && !isMatchStarted && isTipWidget),
             child: Card(
               color: const Color.fromRGBO(255, 255, 255, 1.0),
               shape: RoundedRectangleBorder(
