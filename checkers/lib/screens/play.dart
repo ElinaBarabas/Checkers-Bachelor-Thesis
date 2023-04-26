@@ -155,7 +155,7 @@ class _PlayPageState extends State<PlayPage> {
                 child: buildGameTable(context),
               )),
 
-            buildWinnerWidget(),
+          buildWinnerWidget(),
           const SizedBox(width: 100),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerTurn()],),
@@ -329,27 +329,27 @@ class _PlayPageState extends State<PlayPage> {
               canMove = gameTable.isJumpOnFieldAllowed(
                   oldRow, oldColumn, newRow, newColumn);
             }
-
-            if (diffRow <= 2 && diffColumn <= 2 && oldRow != newRow &&
-                oldColumn != newColumn && canMove &&
-                gameTable.isMovingBackAllowed(men, oldRow, newRow)) {
-              setState(() {
-
-                gameTable.moveChecker(
-                    men, CheckerboardCoordinate.change(coordinate));
-                gameTable.canCapture(coordinate);
-                if (gameTable.canCaptureMore(men, coordinate)) {
-                  modeWalking = 2;
-                } else {
-                  if (gameTable.isOnKingRow(
-                      gameTable.currentPlayer, coordinate)) {
-                    men.checkerBecomesKing();
+            if ((isMatchStarted && custom) || !custom) {
+              if (diffRow <= 2 && diffColumn <= 2 && oldRow != newRow &&
+                  oldColumn != newColumn && canMove &&
+                  gameTable.isMovingBackAllowed(men, oldRow, newRow)) {
+                setState(() {
+                  gameTable.moveChecker(
+                      men, CheckerboardCoordinate.change(coordinate));
+                  gameTable.canCapture(coordinate);
+                  if (gameTable.canCaptureMore(men, coordinate)) {
+                    modeWalking = 2;
+                  } else {
+                    if (gameTable.isOnKingRow(
+                        gameTable.currentPlayer, coordinate)) {
+                      men.checkerBecomesKing();
+                    }
+                    modeWalking = 1;
+                    gameTable.resetCheckerboardState();
+                    gameTable.changePlayerTurn();
                   }
-                  modeWalking = 1;
-                  gameTable.resetCheckerboardState();
-                  gameTable.changePlayerTurn();
-                }
-              });
+                });
+              }
             }
           });
     }
@@ -405,6 +405,7 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   buildWinnerWidget() {
+    print("Hei");
     var winner = "-";
     if (gameTable.checkWinner() == 1) {
       winner = "White";
@@ -414,7 +415,7 @@ class _PlayPageState extends State<PlayPage> {
 
     // winner = winner.toUpperCase();
 
-    return (gameTable.checkWinner() != 0 && isMatchStarted) ? Card(
+    return (gameTable.checkWinner() != 0 && ((isMatchStarted && custom) || !custom)) ? Card(
 
         color: const Color(0xff9d7760),
         shape: RoundedRectangleBorder(
