@@ -298,7 +298,7 @@ class _PlayPageState extends State<PlayPage> {
               setState(() {});
               },
             child: Center(child: buildMenWidget(
-                player: men.player, isKing: men.isKing, size: blockSize - 1)),
+                player: men.player, isKing: men.isKing, size: blockSize)),
           );
 
       if (men.player == gameTable.currentPlayer) {
@@ -499,7 +499,11 @@ class _PlayPageState extends State<PlayPage> {
             boxShadow: const [BoxShadow(
                 color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
             ],
-            color: player == 2 ? Colors.black54 : Colors.grey[100]));
+            color: player == 2 ? Colors.black54 : Colors.grey[100]),
+            child: ImageIcon(const AssetImage("assets/images/piece_style.png"),
+                color: player == 2 ? Colors.grey[100]?.withOpacity(0.1) : Colors
+                    .black54.withOpacity(0.1),
+                size: size - (size * 0.1)));
   }
 
   void startMatch() {

@@ -19,6 +19,42 @@ class DisplayPictureScreen extends StatelessWidget {
 
 
   uploadImage(BuildContext context) async {
+
+    var isResponseRetrieved =  false;
+
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Visibility(
+            visible: !isResponseRetrieved,
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),),
+              // The background color
+              backgroundColor: Color.fromRGBO(254, 246, 218, 1),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2C2623)),),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Loading...')
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+
+    // await Future.delayed(const Duration(seconds: 5, milliseconds: 50));
+
+
     final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
     final headers = {"Content-type": "multipart/form-data"};
@@ -32,7 +68,7 @@ class DisplayPictureScreen extends StatelessWidget {
     final response = await request.send().timeout(const Duration(seconds: 100));
 
     http.Response res = await http.Response.fromStream(response);
-
+    isResponseRetrieved = true;
     final resJson = jsonDecode(res.body);
 
     var message = resJson['message'];
@@ -42,6 +78,7 @@ class DisplayPictureScreen extends StatelessWidget {
       showAlertDialog(context);
     }
     else {
+      Navigator.pop(context);    // we pop the loading alert since the conversion is done
       List<List<String>> responseMatrix = processResponse(message);
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => Play(custom: true, responseMatrix: responseMatrix)));
     }
@@ -55,7 +92,6 @@ class DisplayPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
         backgroundColor: const Color(0xFF2C2623),
@@ -135,7 +171,7 @@ class DisplayPictureScreen extends StatelessWidget {
                         showConnectionAlertDialog(context);
                       }
                       else {
-                        _fetchData(context);
+                        // buildFetchDataWidget(context);
                         uploadImage(context);
                       }
                     },
@@ -344,45 +380,5 @@ class DisplayPictureScreen extends StatelessWidget {
       },
     );
   }
-
-  void _fetchData(BuildContext context, [bool mounted = true]) async {
-    // show the loading dialog
-    showDialog(
-      // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),),
-            // The background color
-            backgroundColor: Color.fromRGBO(254, 246, 218, 1),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  // The loading indicator
-                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2C2623)),),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text('Loading...')
-                ],
-              ),
-            ),
-          );
-        });
-
-    // Your asynchronous computation here (fetching data from an API, processing files, inserting something to the database, etc)
-    await Future.delayed(const Duration(seconds: 5, milliseconds: 50));
-
-    // Close the dialog programmatically
-    // We use "mounted" variable to get rid of the "Do not use BuildContexts across async gaps" warning
-    if (!mounted) return;
-    Navigator.of(context).pop();
-  }
-
 
 }
