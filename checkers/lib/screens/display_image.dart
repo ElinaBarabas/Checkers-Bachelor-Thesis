@@ -135,6 +135,7 @@ class DisplayPictureScreen extends StatelessWidget {
                         showConnectionAlertDialog(context);
                       }
                       else {
+                        _fetchData(context);
                         uploadImage(context);
                       }
                     },
@@ -343,4 +344,45 @@ class DisplayPictureScreen extends StatelessWidget {
       },
     );
   }
+
+  void _fetchData(BuildContext context, [bool mounted = true]) async {
+    // show the loading dialog
+    showDialog(
+      // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),),
+            // The background color
+            backgroundColor: Color.fromRGBO(254, 246, 218, 1),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The loading indicator
+                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2C2623)),),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('Loading...')
+                ],
+              ),
+            ),
+          );
+        });
+
+    // Your asynchronous computation here (fetching data from an API, processing files, inserting something to the database, etc)
+    await Future.delayed(const Duration(seconds: 5, milliseconds: 50));
+
+    // Close the dialog programmatically
+    // We use "mounted" variable to get rid of the "Do not use BuildContexts across async gaps" warning
+    if (!mounted) return;
+    Navigator.of(context).pop();
+  }
+
+
 }
