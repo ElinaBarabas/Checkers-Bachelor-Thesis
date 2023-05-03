@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
 class DisplayPictureScreen extends StatelessWidget {
@@ -18,7 +19,7 @@ class DisplayPictureScreen extends StatelessWidget {
   const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
 
 
-  uploadImage(BuildContext context) async {
+  sendImageToServer(BuildContext context) async {
 
     var isResponseRetrieved =  false;
 
@@ -27,7 +28,7 @@ class DisplayPictureScreen extends StatelessWidget {
         context: context,
         builder: (_) {
           return Visibility(
-            visible: !isResponseRetrieved,
+            visible: (!isResponseRetrieved && !isButtonVisible) || isButtonVisible,
             child: Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40),),
@@ -55,7 +56,9 @@ class DisplayPictureScreen extends StatelessWidget {
     // await Future.delayed(const Duration(seconds: 5, milliseconds: 50));
 
 
+
     final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
+    // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
     final headers = {"Content-type": "multipart/form-data"};
 
@@ -76,6 +79,7 @@ class DisplayPictureScreen extends StatelessWidget {
     if(message == "NOT FOUND")
     {
       showAlertDialog(context);
+      isResponseRetrieved = true;
     }
     else {
       Navigator.pop(context);    // we pop the loading alert since the conversion is done
@@ -90,6 +94,20 @@ class DisplayPictureScreen extends StatelessWidget {
     print("saved");
   }
 
+  Future<void> uploadImage(BuildContext context) async {
+    final picker = ImagePicker();
+
+    final selectedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (selectedImage != null) {
+
+       Navigator.pushReplacement(
+           context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: selectedImage.path, isButtonVisible: true)));
+
+    }
+  }
+  
+  
+  
   @override
   Widget build(BuildContext context) {
 
@@ -111,6 +129,30 @@ class DisplayPictureScreen extends StatelessWidget {
                           Navigator.pop(context);
                         },
                     ),
+                    SizedBox(width: 5,),
+                    Visibility(
+                      visible: isButtonVisible,
+                      child: Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                )
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color.fromRGBO(254, 246, 218, 1),
+                            ),
+                          ),
+                          onPressed: () => {uploadImage(context)},
+                          child: const Text(
+                            "Upload picture",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ),
                     Visibility(
                       visible: !isButtonVisible,
                       child: Expanded(
@@ -126,7 +168,7 @@ class DisplayPictureScreen extends StatelessWidget {
                               const Color.fromRGBO(254, 246, 218, 1),
                             ),
                           ),
-                          onPressed: () => {saveImage()},
+                          onPressed: () => {   Navigator.pop(context), saveImage()},
                           child: const Text(
                             "Save picture",
                             style: TextStyle(color: Colors.black),
@@ -150,7 +192,8 @@ class DisplayPictureScreen extends StatelessWidget {
                               const Color.fromRGBO(254, 246, 218, 1),
                             ),
                           ),
-                          onPressed: () => { Navigator.pop(context)},
+                          onPressed: () => { Navigator.pop(context),
+                          Navigator.of(context).pushNamed("/camera")},
                           child: const Text(
                             "Retake picture",
                             style: TextStyle(color: Colors.black),
@@ -172,7 +215,7 @@ class DisplayPictureScreen extends StatelessWidget {
                       }
                       else {
                         // buildFetchDataWidget(context);
-                        uploadImage(context);
+                        sendImageToServer(context);
                       }
                     },
                     child:
@@ -225,20 +268,20 @@ class DisplayPictureScreen extends StatelessWidget {
   showAlertDialog(BuildContext context) {
 
     Widget retakePictureButton = Padding(
-      padding: const EdgeInsets.only(right: 10.0, bottom: 5),
+      padding: const EdgeInsets.only(right: 5, bottom: 5),
       child: TextButton(
-        child: const Text("Retake picture", style: TextStyle(color: Color(0xFF2C2623), fontSize: 17, fontWeight: FontWeight.bold)),
+        child: const Text("Choose another picture", style: TextStyle(color: Color(0xFF2C2623), fontSize: 15, fontWeight: FontWeight.bold)),
         onPressed: () {
           Navigator.pop(context);
           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true)));
+                    context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true)));
         },
       ),
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),
       ),

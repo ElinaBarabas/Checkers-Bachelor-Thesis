@@ -176,7 +176,7 @@ class _SelectImageSourceState extends State<SelectImageSource> {
               // the DisplayPictureScreen widget.
               imagePath: imagePath, isButtonVisible: false,
             ),
-          ));
+          )).then((value) => Navigator.pop(context));
     }
   }
 }
