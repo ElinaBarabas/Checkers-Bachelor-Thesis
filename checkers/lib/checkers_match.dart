@@ -470,6 +470,9 @@ class CheckersMatch {
     }
 
     bool canCapture(CheckerboardCoordinate checkerboardCoordinate) {
+        print("Can capture");
+        print(checkerboardCoordinate.row);
+        print(checkerboardCoordinate.column);
         Captured capturing = getCheckerboardField(checkerboardCoordinate).capturedChecker;
         if(capturing != null && capturing.isCaptured) {
           getCheckerboardField(capturing.checker.coordinate).checker = Checker(0, false, CheckerboardCoordinate(-1, -1));
@@ -481,9 +484,14 @@ class CheckersMatch {
     bool canCaptureMore(Checker checker, CheckerboardCoordinate checkerboardCoordinate) {
 
         // return false; //straightCheckers
+
         if(checker.isKing) {
-          coordinatesKingPath.clear();
-          return canKingMoveInAnyDirection(checker, 3);
+          if(isSurroundedByOpponentFields(checkerboardCoordinate)) {
+            coordinatesKingPath.clear();
+            return canKingMoveInAnyDirection(checker, 3);
+          }
+          return false;
+
         }
         else {
           return getCheckerboardField(checkerboardCoordinate).canCaptureAgain;
@@ -576,6 +584,46 @@ class CheckersMatch {
     return checkerboard;
   }
 
+  bool isSurroundedByOpponentFields(CheckerboardCoordinate checkerboardCoordinate) {
+
+    int row = checkerboardCoordinate.row;
+    int column = checkerboardCoordinate.column;
+
+    CheckerboardCoordinate leftUpField = CheckerboardCoordinate(row - 1, column - 1);
+    CheckerboardCoordinate rightUpField = CheckerboardCoordinate(row - 1, column + 1);
+    CheckerboardCoordinate leftDownField = CheckerboardCoordinate(row + 1, column - 1);
+    CheckerboardCoordinate rightDownField = CheckerboardCoordinate(row + 1, column + 1);
+
+    if(containsOpponentChecker(leftDownField) || containsOpponentChecker(leftUpField) || containsOpponentChecker(rightDownField) || containsOpponentChecker(rightUpField)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  bool isJumpOnAtLeastOneFieldAllowed(CheckerboardCoordinate checkerboardCoordinate) {
+
+
+    int row = checkerboardCoordinate.row;
+    int column = checkerboardCoordinate.column;
+
+    bool leftUp = isJumpOnFieldAllowed(row, column, row-2, column - 2);
+    bool leftDown = isJumpOnFieldAllowed(row, column, row+2, column - 2);
+    bool rightUp = isJumpOnFieldAllowed(row, column, row-2, column + 2);
+    bool rightDown = isJumpOnFieldAllowed(row, column, row+ 2, column + 2);
+
+    print("LU");
+    print(leftUp);
+    print("LD");
+    print(leftDown);
+
+    print("RU");
+    print(rightUp);
+    print("RD");
+    print(rightDown);
+
+    return leftUp || leftDown || rightDown || rightUp;
+  }
 
 }
 

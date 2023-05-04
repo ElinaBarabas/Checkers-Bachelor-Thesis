@@ -358,8 +358,8 @@ class _PlayPageState extends State<PlayPage> {
                 setState(() {
                   gameTable.moveChecker(
                       men, CheckerboardCoordinate.change(coordinate));
-                  gameTable.canCapture(coordinate);
-                  if (gameTable.canCaptureMore(men, coordinate)) {
+                  var canCapture = gameTable.canCapture(coordinate);
+                  if ((gameTable.canCaptureMore(men, coordinate) && !men.isKing) || (men.isKing && gameTable.isSurroundedByOpponentFields(coordinate) && canCapture && gameTable.isJumpOnAtLeastOneFieldAllowed(coordinate))) {
                     modeWalking = 2;
                   } else {
                     if (gameTable.isOnKingRow(

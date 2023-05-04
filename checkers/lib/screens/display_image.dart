@@ -89,9 +89,8 @@ class DisplayPictureScreen extends StatelessWidget {
   }
 
   Future<void> saveImage() async{
-    print("pressed");
+
     await GallerySaver.saveImage(imagePath);
-    print("saved");
   }
 
   Future<void> uploadImage(BuildContext context) async {
