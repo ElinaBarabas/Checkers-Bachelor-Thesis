@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:checkers/checkerboard_field.dart';
+import 'package:checkers/screens/chess.dart';
 import 'package:checkers/screens/play.dart';
 import 'package:checkers/screens/rules.dart';
 import 'package:checkers/screens/scan.dart';
@@ -45,8 +46,9 @@ Future<void> main() async {
         // '/scan': (context) => Scan(camera: firstCamera),
         '/scan': (context) => const SelectImageSource(),
         '/camera': (context) => Scan(camera: firstCamera),
-        '/play': (context) => const Play(custom: false, responseMatrix: [[]]),
+        '/checkers': (context) => const Play(custom: false, responseMatrix: [[]]),
         '/rules': (context) => const Rules(),
+        '/chess': (context) => const ChessScreen(),
       }
   ));
 

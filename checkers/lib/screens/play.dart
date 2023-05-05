@@ -29,11 +29,11 @@ class Play extends StatelessWidget {
 
 class PlayPage extends StatefulWidget {
 
-  final Color whiteFields = Color.fromRGBO(254, 246, 218, 1);
-  final Color blackFields = Color(0xff9d7760);
+  final Color whiteFields = Color.fromRGBO(238,222,189, 1);
+  final Color blackFields = Color(0xff7e6c62);
   final Color colorBorderTable = Color(0xff0a0100);
   final Color colorAppBar = Color(0xff6d3935);
-  final Color colorBackgroundGame =  const Color(0xFF38302B);
+  final Color colorBackgroundGame =  const Color(0xFF211810);
   final Color colorBackgroundHighlight = Colors.blue;
   final Color colorBackgroundHighlightAfterKilling = Colors.deepPurple;
 
@@ -136,7 +136,7 @@ class _PlayPageState extends State<PlayPage> {
                     Expanded(
                       flex: 1,
                       child: Image.asset(
-                        "assets/images/king1.png",
+                        "images/king1.png",
                         scale: 2,
                       ),
                     ),
@@ -197,7 +197,7 @@ class _PlayPageState extends State<PlayPage> {
             ),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
-            const Color(0xff9d7760),
+            const Color(0xff7e6c62),
           ),
         ),
         onPressed: () => {startMatch()},
@@ -247,10 +247,10 @@ class _PlayPageState extends State<PlayPage> {
     }
 
     return Container(
-      color: Color(0xffecd7ce),
+      color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Container(padding: const EdgeInsets.all(2),
+        padding: const EdgeInsets.all(2.0),
+        child: Container(padding: const EdgeInsets.all(5),
             color: widget.colorBorderTable,
             child: Column(mainAxisSize: MainAxisSize.min,
                 children: listCol)),
@@ -382,10 +382,10 @@ class _PlayPageState extends State<PlayPage> {
 
   Widget buildBlockTableContainer(Color colorBackground, Widget menWidget) {
     Widget containerBackground = Container(
-        width: blockSize + (blockSize * 0.1),
-        height: blockSize + (blockSize * 0.1),
+        width: blockSize + (blockSize * 0.13),
+        height: blockSize + (blockSize * 0.13),
         color: colorBackground,
-        margin: const EdgeInsets.all(3),
+        margin: const EdgeInsets.all(0),
         child: menWidget);
     return containerBackground;
   }
@@ -397,7 +397,7 @@ class _PlayPageState extends State<PlayPage> {
         width: 360,
         height: 70,
         child: Card(
-            color: const Color.fromRGBO(254, 246, 218, 1),
+            color: const Color.fromRGBO(238,222,189, 1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(40),
             ),
@@ -414,7 +414,7 @@ class _PlayPageState extends State<PlayPage> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                    color: const Color(0xff9d7760)
+                    color: const Color(0xff7e6c62)
                 ),
                 child: Padding(padding: const EdgeInsets.all(10),
                     child: buildMenWidget(
@@ -439,7 +439,7 @@ class _PlayPageState extends State<PlayPage> {
 
     return (gameTable.checkWinner() != 0 && isWinnerWidget && ((isMatchStarted && custom) || !custom)) ? Card(
 
-        color: const Color(0xff9d7760),
+        color: const Color(0xff7e6c62),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),
         ),
@@ -457,7 +457,7 @@ class _PlayPageState extends State<PlayPage> {
           Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(150),
-                  color: const Color.fromRGBO(254, 246, 218, 1)
+                  color: const Color.fromRGBO(238,222,189, 1)
               ),
               child: Padding(padding: const EdgeInsets.all(3),
                   child: TextButton(
@@ -487,7 +487,7 @@ class _PlayPageState extends State<PlayPage> {
                   color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
               ],
               color: player == 2 ? Colors.black54 : Colors.grey[100]),
-          child: ImageIcon(const AssetImage("assets/images/king1.png"),
+          child: ImageIcon(const AssetImage("images/king1.png"),
               color: player == 2 ? Colors.grey[100]?.withOpacity(0.5) : Colors
                   .black54.withOpacity(0.5),
               size: size - (size * 0.1)));
@@ -500,7 +500,7 @@ class _PlayPageState extends State<PlayPage> {
                 color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
             ],
             color: player == 2 ? Colors.black54 : Colors.grey[100]),
-            child: ImageIcon(const AssetImage("assets/images/piece_style.png"),
+            child: ImageIcon(const AssetImage("images/piece_style.png"),
                 color: player == 2 ? Colors.grey[100]?.withOpacity(0.1) : Colors
                     .black54.withOpacity(0.1),
                 size: size - (size * 0.1)));
@@ -523,7 +523,7 @@ class _PlayPageState extends State<PlayPage> {
       visible: (custom && !isMatchStarted && isCurrentPlayerWidget),
       child: Container(
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(254, 246, 218, 1),
+          color: Color.fromRGBO(238, 222, 189, 1.0),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         child: ToggleButtons(
@@ -542,7 +542,7 @@ class _PlayPageState extends State<PlayPage> {
               }
             });
           },
-          selectedBorderColor: Colors.white,
+          selectedBorderColor: Color.fromRGBO(238, 222, 189, 1.0),
           selectedColor:  Colors.grey,
           fillColor:  Colors.black54,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -565,7 +565,7 @@ class _PlayPageState extends State<PlayPage> {
     return Visibility(
       visible: isEmpty,
       child: Card(
-          color: const Color(0xff9d7760),
+          color: const Color(0xff7e6c62),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
           ),
@@ -583,7 +583,7 @@ class _PlayPageState extends State<PlayPage> {
             Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(150),
-                    color: const Color.fromRGBO(254, 246, 218, 1)
+                    color: const Color.fromRGBO(238, 222, 189, 1.0)
                 ),
                 child: Padding(padding: const EdgeInsets.all(3),
                     child: TextButton(
@@ -625,7 +625,7 @@ class _PlayPageState extends State<PlayPage> {
               Expanded(
                 flex: 1,
                 child: Image.asset(
-                  "assets/images/drag.png",
+                  "images/drag.png",
                   scale: 2,
                 ),
               ),

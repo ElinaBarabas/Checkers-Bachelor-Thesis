@@ -24,14 +24,14 @@ class _RulesState extends State<Rules> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF2C2623),
+        backgroundColor: const Color(0xFF211810),
         body: SingleChildScrollView(
           child: Column(
                 children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 300),
                         child: IconButton(
-                          icon: Image.asset('assets/images/back.png'),
+                          icon: Image.asset('images/back.png'),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -39,7 +39,7 @@ class _RulesState extends State<Rules> {
                       ),
                       _headerView(),
                       Card(
-                        color: const Color.fromRGBO(254, 246, 218, 1),
+                        color: const Color.fromRGBO(238, 222, 189, 1.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40.0),
                         ),
@@ -78,7 +78,7 @@ class _RulesState extends State<Rules> {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 85.0),
                                         child: Image.asset(
-                                          "assets/images/checkers1.png",
+                                          "images/checkers1.png",
                                           scale: 3,
                                         ),
                                       ),
@@ -103,7 +103,7 @@ class _RulesState extends State<Rules> {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 85.0),
                                         child: Image.asset(
-                                          "assets/images/checkers2.png",
+                                          "images/checkers2.png",
                                           scale: 3,
                                         ),
                                       ),

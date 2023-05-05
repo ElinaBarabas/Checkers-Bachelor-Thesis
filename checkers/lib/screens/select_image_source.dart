@@ -32,7 +32,7 @@ class _SelectImageSourceState extends State<SelectImageSource> {
           Padding(
             padding: const EdgeInsets.only(top: 40, left: 15),
             child: IconButton(
-              icon: Image.asset('assets/images/back.png'),
+              icon: Image.asset('images/back.png'),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -53,10 +53,10 @@ class _SelectImageSourceState extends State<SelectImageSource> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    _cardDetailView("assets/images/camera.png", "camera",
+                    _cardDetailView("images/camera.png", "camera",
                         "Take Picture"),
                     const SizedBox(height: 50),
-                    _cardDetailView("assets/images/upload.png", "upload",
+                    _cardDetailView("images/upload.png", "upload",
                         "Upload from Gallery"),
                   ],
                 ),
@@ -70,7 +70,7 @@ class _SelectImageSourceState extends State<SelectImageSource> {
 
   Widget _backgroundImage() {
     return Container(
-        color: const Color(0xFF2C2623)
+        color: const Color(0xFF211810)
     );
   }
 
@@ -122,7 +122,7 @@ class _SelectImageSourceState extends State<SelectImageSource> {
         },
         child:
         Card(
-          color: const Color.fromRGBO(254, 246, 218, 1),
+          color: const Color.fromRGBO(238, 222, 189, 1.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
           ),

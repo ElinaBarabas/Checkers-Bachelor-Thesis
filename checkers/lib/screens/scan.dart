@@ -59,7 +59,7 @@ class ScanState extends State<Scan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2C2623),
+      backgroundColor: const Color(0xFF211810),
 
       // appBar: AppBar(backgroundColor: const Color(0xFF2C2623), title: const Text('Scan the match')),
       // You must wait until the controller is initialized before displaying the
@@ -76,7 +76,7 @@ class ScanState extends State<Scan> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10, right: 300),
                   child: IconButton(
-                    icon: Image.asset('assets/images/back.png'),
+                    icon: Image.asset('images/back.png'),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -96,7 +96,7 @@ class ScanState extends State<Scan> {
                         Expanded(
                           flex: 1,
                           child: Image.asset(
-                            "assets/images/checkers3.png",
+                            "images/checkers3.png",
                             scale: 2,
                           ),
                         ),
@@ -163,7 +163,7 @@ class ScanState extends State<Scan> {
                     },
                     child:
                     Card(
-                      color: const Color.fromRGBO(254, 246, 218, 1),
+                      color: const Color.fromRGBO(238, 222, 189, 1.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
@@ -175,7 +175,7 @@ class ScanState extends State<Scan> {
                             Expanded(
                               flex: 1,
                               child: Image.asset(
-                                "assets/images/scan.png",
+                                "images/scan.png",
                                 scale: 12,
                               ),
                             ),

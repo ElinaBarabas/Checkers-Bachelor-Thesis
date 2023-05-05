@@ -24,42 +24,48 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-          _backgroundImage(),
-          Column(
-            children: [
-              const SizedBox(
-                height: 45,
-              ),
-              _headerView(),
-              const SizedBox(
-                height: 10,
-              ),
-
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  children: [
-                    _cardDetailView("assets/images/checker-board.png", "Play",
-                    "Learn by yourself"),
-                    _cardDetailView("assets/images/qr-code.png", "Scan",
-                        "Continue the 'real' game virtually"),
-                    _cardDetailView("assets/images/rules.png", "Rules",
-                        "How to play Checkers"),
-                  ],
+        backgroundColor: const Color(0xFF211810),
+        body: SingleChildScrollView(
+          child: Stack(children: [
+            _backgroundImage(),
+            Column(
+              children: [
+                const SizedBox(
+                  height: 45,
                 ),
-              ),
+                _headerView(),
+                // const SizedBox(
+                //   height: 10,
+                // ),
 
-            ],
-          ),
-          // _bottomView(context),
-        ]));
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      _cardDetailView("images/checker-board.png", "Checkers",
+                      "Play from scratch"),
+                      _cardDetailView("images/qr-code.png", "Scan",
+                          "Virtualize the physical match"),
+                      _cardDetailView("images/knight.png", "Chess",
+                          "Learn by playing"),
+                      _cardDetailView("images/rules.png", "Rules",
+                          "How to play Checkers"),
+
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+            // _bottomView(context),
+          ]),
+        ));
   }
 
   Widget _backgroundImage() {
     return Container(
-        color: const Color(0xFF2C2623)
+        color: const Color(0xFF211810)
       );
   }
 
@@ -112,7 +118,7 @@ class _HomepageState extends State<Homepage> {
         },
       child:
         Card(
-        color: const Color.fromRGBO(254, 246, 218, 1),
+        color: const Color.fromRGBO(238, 222, 189, 1.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),
         ),
@@ -125,13 +131,13 @@ class _HomepageState extends State<Homepage> {
               Expanded(
                 child: Image.asset(
                   imagePath,
-                  scale: 1,
+                  scale: 5,
                 ),
               ),
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 18.0),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +156,7 @@ class _HomepageState extends State<Homepage> {
                           description,
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 18,
+                            fontSize: 17,
                           ),
                         ),
                       ]),

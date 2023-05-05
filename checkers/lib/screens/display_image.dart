@@ -33,14 +33,14 @@ class DisplayPictureScreen extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40),),
               // The background color
-              backgroundColor: Color.fromRGBO(254, 246, 218, 1),
+              backgroundColor: Color.fromRGBO(238, 222, 189, 1.0),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
                     // The loading indicator
-                    CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2C2623)),),
+                    CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xff7e6c62)),),
                     SizedBox(
                       height: 15,
                     ),
@@ -57,8 +57,10 @@ class DisplayPictureScreen extends StatelessWidget {
 
 
 
-    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
-    // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL
+    // final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
+    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.88.233:50100/upload"));    //ASTA E LOCAL
+    // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL LA FACULTATE
+
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
     final headers = {"Content-type": "multipart/form-data"};
 
@@ -111,7 +113,7 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        backgroundColor: const Color(0xFF2C2623),
+        backgroundColor: const Color(0xFF211810),
         // appBar: AppBar(backgroundColor: const Color(0xFF2C2623), title: const Text('Display the Picture')),
         // The image is stored as a file on the device. Use the `Image.file`
         // constructor with the given path to display the image.
@@ -123,7 +125,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                        icon: Image.asset('assets/images/back.png'),
+                        icon: Image.asset('images/back.png'),
                         onPressed: () {
                           Navigator.pop(context);
                         },
@@ -141,7 +143,7 @@ class DisplayPictureScreen extends StatelessWidget {
                                 )
                             ),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromRGBO(254, 246, 218, 1),
+                              const Color.fromRGBO(238, 222, 189, 1.0),
                             ),
                           ),
                           onPressed: () => {uploadImage(context)},
@@ -164,7 +166,7 @@ class DisplayPictureScreen extends StatelessWidget {
                                 )
                             ),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromRGBO(254, 246, 218, 1),
+                              const Color.fromRGBO(238, 222, 189, 1.0),
                             ),
                           ),
                           onPressed: () => {   Navigator.pop(context), saveImage()},
@@ -188,7 +190,7 @@ class DisplayPictureScreen extends StatelessWidget {
                               ),
                             ),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromRGBO(254, 246, 218, 1),
+                              const Color.fromRGBO(238, 222, 189, 1.0),
                             ),
                           ),
                           onPressed: () => { Navigator.pop(context),
@@ -219,7 +221,7 @@ class DisplayPictureScreen extends StatelessWidget {
                     },
                     child:
                     Card(
-                      color: const Color.fromRGBO(254, 246, 218, 1),
+                      color: const Color.fromRGBO(238, 222, 189, 1.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
@@ -231,7 +233,7 @@ class DisplayPictureScreen extends StatelessWidget {
                             Expanded(
                               flex: 1,
                               child: Image.asset(
-                                "assets/images/play.png",
+                                "images/play.png",
                                 scale: 7,
                               ),
                             ),
@@ -269,7 +271,8 @@ class DisplayPictureScreen extends StatelessWidget {
     Widget retakePictureButton = Padding(
       padding: const EdgeInsets.only(right: 5, bottom: 5),
       child: TextButton(
-        child: const Text("Choose another picture", style: TextStyle(color: Color(0xFF2C2623), fontSize: 15, fontWeight: FontWeight.bold)),
+        child: const Text("Choose another picture", style: TextStyle(color: Color(
+            0xff070000), fontSize: 15, fontWeight: FontWeight.bold)),
         onPressed: () {
           Navigator.pop(context);
           Navigator.pushReplacement(
@@ -284,7 +287,7 @@ class DisplayPictureScreen extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),
       ),
-      backgroundColor: const Color.fromRGBO(254, 246, 218, 1),
+      backgroundColor: const Color.fromRGBO(238, 222, 189, 1.0),
       content: const Padding(
         padding: EdgeInsets.only(top: 25.0),
         child: Text("No checkerboard could be detected!", textAlign: TextAlign.center, style: TextStyle(
@@ -348,7 +351,7 @@ class DisplayPictureScreen extends StatelessWidget {
       child: const Text(
         "OK",
         style: TextStyle(
-          color: Color(0xFF2C2623),
+          color: Color(0xFF7e6c62),
           fontSize: 15,
           fontWeight: FontWeight.bold,
         ),
@@ -363,7 +366,7 @@ class DisplayPictureScreen extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),
       ),
-      backgroundColor: const Color.fromRGBO(254, 246, 218, 1),
+      backgroundColor: const Color.fromRGBO(238, 222, 189, 1.0),
       content:  Padding(
         padding: const EdgeInsets.only(top: 40),
         child: Container(
@@ -374,7 +377,7 @@ class DisplayPictureScreen extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Image.asset(
-                  "assets/images/no-wifi.png",
+                  "images/no-wifi.png",
                   scale: 4,
                 ),
               ),
