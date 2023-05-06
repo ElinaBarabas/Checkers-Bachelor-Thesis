@@ -43,12 +43,12 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
+                      _cardDetailView("images/chess.png", "Chess",
+                          "Learn by playing"),
                       _cardDetailView("images/checker-board.png", "Checkers",
                       "Play from scratch"),
                       _cardDetailView("images/qr-code.png", "Scan",
                           "Virtualize the physical match"),
-                      _cardDetailView("images/knight.png", "Chess",
-                          "Learn by playing"),
                       _cardDetailView("images/rules.png", "Rules",
                           "How to play Checkers"),
 

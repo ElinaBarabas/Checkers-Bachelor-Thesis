@@ -176,7 +176,7 @@ class _PlayPageState extends State<PlayPage> {
             children: <Widget>[buildCurrentPlayerTurn()],),
           buildEmptyBoardWidget(),
 
-          const SizedBox(width: 100, height: 20),
+          const SizedBox(width: 100, height: 10),
           buildSelectCurrentPlayer(),
           const SizedBox(width: 100, height: 20),
           buildStartMatchButton(),
