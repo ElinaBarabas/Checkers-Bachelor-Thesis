@@ -13,6 +13,7 @@ class ChessScreen extends StatefulWidget {
 class _ChessScreenState extends State<ChessScreen> {
   ChessBoardController controller = ChessBoardController();
   late bool isCheck = false;
+  late bool isMate = false;
 
   @override
   void initState() {
@@ -28,7 +29,8 @@ class _ChessScreenState extends State<ChessScreen> {
 
   void _onControllerChanged() {
     isCheck = controller.game.in_check;
-    print(isCheck);
+    isMate = controller.isCheckMate();
+    print(isMate);
     setState(() {
       // Rebuild the widget tree when the controller changes to update the current player widget
     });
@@ -106,7 +108,7 @@ class _ChessScreenState extends State<ChessScreen> {
           SizedBox(height: 5),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerWidget()],),
-          buildKingInChessWidget(),
+          buildCheckWidget(),
 
         ],
       ),
@@ -115,34 +117,58 @@ class _ChessScreenState extends State<ChessScreen> {
 
   buildCurrentPlayerWidget() {
 
-    return SizedBox(
-      width: 360,
-      height: 60,
-      child: Card(
-          color: const Color.fromRGBO(238, 222, 189, 1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          elevation: 1,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            const Text(
-              "CURRENT TURN     ",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+    if(isMate) {
+      return SizedBox(
+          width: 360,
+          height: 60,
+          child: GestureDetector(
+              onTap: () => {controller.resetBoard()},
+              child: Card(
+                color: const Color.fromRGBO(238, 222, 189, 1),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40)),
+                child: const Center(
+                  child: Text(
+                    "Play Again!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+          ));
+    }
+
+    return Visibility(
+      visible: !isMate,
+      child: SizedBox(
+        width: 360,
+        height: 60,
+        child: Card(
+            color: const Color.fromRGBO(238, 222, 189, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: const Color(0xff7e6c62)
+            elevation: 1,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              const Text(
+                "CURRENT TURN     ",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
-              child: Padding(padding: const EdgeInsets.all(10),
-                  child: buildPlayerWidget(
-                      player: controller.game.turn.toString(), size: 20.0)),
-            )
-          ])
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: const Color(0xff7e6c62)
+                ),
+                child: Padding(padding: const EdgeInsets.all(10),
+                    child: buildPlayerWidget(
+                        player: controller.game.turn.toString(), size: 20.0)),
+              )
+            ])
+        ),
       ),
     );
   }
@@ -169,58 +195,111 @@ class _ChessScreenState extends State<ChessScreen> {
     );
   }
 
-  buildKingInChessWidget() {
+  buildCheckWidget() {
 
     var currentTurn = controller.game.turn.toString();
 
     String kingInCheck = currentTurn =="Color.BLACK" ? "Black" : "White";
+    String kingInMate = currentTurn =="Color.WHITE" ? "Black" : "White";
 
-    return Visibility(
-      visible: isCheck,
-      child: SizedBox(
-        height: 75,
-        child: Card(
-          color: const Color.fromRGBO(255, 255, 255, 1.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          elevation: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Image.asset(
-                    "images/king.png",
-                    scale: 2,
+    if (isMate)
+    {
+      return Visibility(
+        visible: isMate,
+        child: SizedBox(
+          height: 75,
+          child: Card(
+            color: const Color.fromRGBO(255, 255, 255, 1.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset(
+                      "images/checkmate.png",
+                      scale: 2,
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 13),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "$kingInCheck King is in check!",
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5, top: 13),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Checkmate! $kingInMate Wins!",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
                             ),
-                          ),
-                        ]),
-                  ),
-                )
-              ],
+                          ]),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+
+    }
+    else {
+      return Visibility(
+        visible: (isCheck && !isMate),
+        child: SizedBox(
+          height: 75,
+          child: Card(
+            color: const Color.fromRGBO(255, 255, 255, 1.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset(
+                      "images/king.png",
+                      scale: 2,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 13),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "$kingInCheck King is in check!",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 
 }

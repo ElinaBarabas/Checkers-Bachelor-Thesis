@@ -119,7 +119,7 @@ class _PlayPageState extends State<PlayPage> {
 
         body: Container(color: widget.colorBackgroundGame, child:
         Column(children: <Widget>[
-          const SizedBox(width: 100, height: 30),
+          const SizedBox(width: 100, height: 70),
           Visibility(
             visible: (custom && !isMatchStarted && isTipWidget),
             child: Card(
