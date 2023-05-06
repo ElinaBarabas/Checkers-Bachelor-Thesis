@@ -198,10 +198,6 @@ class _ChessBoardState extends State<ChessBoard> {
   /// Show dialog when pawn reaches last square
   Future<String?> _promotionDialog(BuildContext context, Color turn) async {
 
-    print("HEI TURN");
-    print(turn);
-
-
     return showDialog<String>(
       context: context,
       barrierDismissible: false,

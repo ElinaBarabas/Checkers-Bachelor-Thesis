@@ -12,7 +12,7 @@ class ChessScreen extends StatefulWidget {
 
 class _ChessScreenState extends State<ChessScreen> {
   ChessBoardController controller = ChessBoardController();
-  late bool isCheck;
+  late bool isCheck = false;
 
   @override
   void initState() {
@@ -95,7 +95,7 @@ class _ChessScreenState extends State<ChessScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
           Center(
             child: ChessBoard(
               controller: controller,
@@ -103,9 +103,10 @@ class _ChessScreenState extends State<ChessScreen> {
               boardOrientation: PlayerColor.white,
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 5),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerWidget()],),
+          buildKingInChessWidget(),
 
         ],
       ),
@@ -116,7 +117,7 @@ class _ChessScreenState extends State<ChessScreen> {
 
     return SizedBox(
       width: 360,
-      height: 70,
+      height: 60,
       child: Card(
           color: const Color.fromRGBO(238, 222, 189, 1),
           shape: RoundedRectangleBorder(
@@ -165,6 +166,60 @@ class _ChessScreenState extends State<ChessScreen> {
         ],
         color: color,
       )
+    );
+  }
+
+  buildKingInChessWidget() {
+
+    var currentTurn = controller.game.turn.toString();
+
+    String kingInCheck = currentTurn =="Color.BLACK" ? "Black" : "White";
+
+    return Visibility(
+      visible: isCheck,
+      child: SizedBox(
+        height: 75,
+        child: Card(
+          color: const Color.fromRGBO(255, 255, 255, 1.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Image.asset(
+                    "images/king.png",
+                    scale: 2,
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 13),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "$kingInCheck King is in check!",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ]),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
