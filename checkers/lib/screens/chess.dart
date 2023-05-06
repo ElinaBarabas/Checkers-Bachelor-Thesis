@@ -30,7 +30,7 @@ class _ChessScreenState extends State<ChessScreen> {
   }
 
   void _onControllerChanged() {
-    isCheck = controller.game.in_check;
+    isCheck = controller.isInCheck();
     isMate = controller.isCheckMate();
     isStaleMate = controller.isStaleMate();
     isDraw = controller.isDraw();
