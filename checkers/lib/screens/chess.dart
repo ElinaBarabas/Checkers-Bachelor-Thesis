@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'chess_logic/chess_board.dart';
 import 'chess_logic/chess_board_controller.dart';
 import 'chess_logic/constants.dart';
@@ -14,6 +12,7 @@ class ChessScreen extends StatefulWidget {
 
 class _ChessScreenState extends State<ChessScreen> {
   ChessBoardController controller = ChessBoardController();
+  late bool isCheck;
 
   @override
   void initState() {
@@ -28,6 +27,8 @@ class _ChessScreenState extends State<ChessScreen> {
   }
 
   void _onControllerChanged() {
+    isCheck = controller.game.in_check;
+    print(isCheck);
     setState(() {
       // Rebuild the widget tree when the controller changes to update the current player widget
     });

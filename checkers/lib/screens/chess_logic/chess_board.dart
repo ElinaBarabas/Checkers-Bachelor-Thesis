@@ -43,6 +43,8 @@ class ChessBoard extends StatefulWidget {
 }
 
 class _ChessBoardState extends State<ChessBoard> {
+
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Chess>(
@@ -115,7 +117,7 @@ class _ChessBoardState extends State<ChessBoard> {
                                 (pieceMoveData.squareName[1] == "2" &&
                                     squareName[1] == "1" &&
                                     pieceMoveData.pieceColor == Color.BLACK))) {
-                          var val = await _promotionDialog(context);
+                          var val = await _promotionDialog(context, game.turn);
 
                           if (val != null) {
                             widget.controller.makeMoveWithPromotion(
@@ -194,36 +196,44 @@ class _ChessBoardState extends State<ChessBoard> {
   }
 
   /// Show dialog when pawn reaches last square
-  Future<String?> _promotionDialog(BuildContext context) async {
+  Future<String?> _promotionDialog(BuildContext context, Color turn) async {
+
+    print("HEI TURN");
+    print(turn);
+
+
     return showDialog<String>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Choose promotion'),
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40)),
+          backgroundColor: turn.toString() == "Color.WHITE" ? Colors.black87 : Colors.white,
+          title: Text('   Choose promotion:', style: TextStyle(color: turn.toString() == "Color.WHITE" ? Colors.white : Colors.black87, fontSize: 16),),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               InkWell(
-                child: WhiteQueen(),
+                child: turn.toString() == "Color.BLACK" ? BlackQueen() : WhiteQueen(),
                 onTap: () {
                   Navigator.of(context).pop("q");
                 },
               ),
               InkWell(
-                child: WhiteRook(),
+                child: turn.toString() == "Color.BLACK" ? BlackRook() : WhiteRook(),
                 onTap: () {
                   Navigator.of(context).pop("r");
                 },
               ),
               InkWell(
-                child: WhiteBishop(),
+                child: turn.toString() == "Color.BLACK" ? BlackBishop() : WhiteBishop(),
                 onTap: () {
                   Navigator.of(context).pop("b");
                 },
               ),
               InkWell(
-                child: WhiteKnight(),
+                child: turn.toString() == "Color.BLACK" ? BlackKnight() : WhiteKnight(),
                 onTap: () {
                   Navigator.of(context).pop("n");
                 },
