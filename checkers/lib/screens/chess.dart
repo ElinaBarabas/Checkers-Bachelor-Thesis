@@ -14,6 +14,8 @@ class _ChessScreenState extends State<ChessScreen> {
   ChessBoardController controller = ChessBoardController();
   late bool isCheck = false;
   late bool isMate = false;
+  late bool isStaleMate = false;
+  late bool isDraw = false;
 
   @override
   void initState() {
@@ -30,7 +32,9 @@ class _ChessScreenState extends State<ChessScreen> {
   void _onControllerChanged() {
     isCheck = controller.game.in_check;
     isMate = controller.isCheckMate();
-    print(isMate);
+    isStaleMate = controller.isStaleMate();
+    isDraw = controller.isDraw();
+
     setState(() {
       // Rebuild the widget tree when the controller changes to update the current player widget
     });
@@ -117,7 +121,7 @@ class _ChessScreenState extends State<ChessScreen> {
 
   buildCurrentPlayerWidget() {
 
-    if(isMate) {
+    if(isMate || isStaleMate || isDraw) {
       return SizedBox(
           width: 360,
           height: 60,
@@ -139,7 +143,7 @@ class _ChessScreenState extends State<ChessScreen> {
     }
 
     return Visibility(
-      visible: !isMate,
+      visible: !isMate && !isDraw && !isStaleMate,
       child: SizedBox(
         width: 360,
         height: 60,
@@ -201,6 +205,105 @@ class _ChessScreenState extends State<ChessScreen> {
 
     String kingInCheck = currentTurn =="Color.BLACK" ? "Black" : "White";
     String kingInMate = currentTurn =="Color.WHITE" ? "Black" : "White";
+
+    if(isStaleMate){
+      return Visibility(
+        visible: isStaleMate,
+        child: SizedBox(
+          height: 75,
+          child: Card(
+            color: const Color.fromRGBO(255, 255, 255, 1.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset(
+                      "images/draw.png",
+                      scale: 2,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5, top: 13),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "    Stalemate!",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if(isDraw){
+      return Visibility(
+        visible: isDraw,
+        child: SizedBox(
+          height: 75,
+          child: Card(
+            color: const Color.fromRGBO(255, 255, 255, 1.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset(
+                      "images/draw.png",
+                      scale: 2,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5, top: 13),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "        Draw!",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
 
     if (isMate)
     {
