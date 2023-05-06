@@ -103,78 +103,69 @@ class _ChessScreenState extends State<ChessScreen> {
             ),
           ),
           SizedBox(height: 20),
-          // Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: <Widget>[buildCurrentPlayerWidget()],),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[buildCurrentPlayerWidget()],),
 
         ],
       ),
     );
   }
 
-  // buildCurrentPlayerWidget() {
-  //
-  //   print(controller.game.turn);
-  //   return SizedBox(
-  //     width: 360,
-  //     height: 70,
-  //     child: Card(
-  //         color: const Color.fromRGBO(238,222,189, 1),
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(40),
-  //         ),
-  //         elevation: 1,
-  //         child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-  //           const Text(
-  //             "CURRENT TURN     ",
-  //             style: TextStyle(
-  //                 color: Colors.black,
-  //                 fontSize: 20,
-  //                 fontWeight: FontWeight.bold),
-  //           ),
-  //           Container(
-  //             decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(100),
-  //                 color: const Color(0xff7e6c62)
-  //             ),
-  //             child: Padding(padding: const EdgeInsets.all(10),
-  //                 child: buildPlayerWidget(
-  //                     player: controller.game.turn.toString(), size: 20.0)),
-  //           )
-  //         ])
-  //     ),
-  //   );
-  //
-  //
-  // }
-  //
-  // Widget buildPlayerWidget({required String player, required double size}) {
-  //   print(player.toString());
-  //
-  //   final color = player == "black" ? Colors.black : Colors.grey[100];
-  //
-  //   return Container(
-  //     width: size,
-  //     height: size,
-  //     decoration: BoxDecoration(
-  //       shape: BoxShape.circle,
-  //       boxShadow: const [
-  //         BoxShadow(
-  //           color: Colors.black45,
-  //           offset: Offset(0, 4),
-  //           blurRadius: 4,
-  //         ),
-  //       ],
-  //       color: color,
-  //     ),
-  //     child: ImageIcon(
-  //       const AssetImage("images/piece_style.png"),
-  //       color: color?.withOpacity(0.1),
-  //       size: size - (size * 0.1),
-  //     ),
-  //   );
-  // }
+  buildCurrentPlayerWidget() {
 
+    return SizedBox(
+      width: 360,
+      height: 70,
+      child: Card(
+          color: const Color.fromRGBO(238, 222, 189, 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          elevation: 1,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            const Text(
+              "CURRENT TURN     ",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: const Color(0xff7e6c62)
+              ),
+              child: Padding(padding: const EdgeInsets.all(10),
+                  child: buildPlayerWidget(
+                      player: controller.game.turn.toString(), size: 20.0)),
+            )
+          ])
+      ),
+    );
+  }
+
+
+  Widget buildPlayerWidget({required String player, required double size}) {
+
+    final color = player == "Color.BLACK" ? Colors.black : Colors.grey[100];
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(0, 4),
+            blurRadius: 4,
+          ),
+        ],
+        color: color,
+      )
+    );
+  }
 
 }
 
