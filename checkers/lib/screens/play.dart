@@ -63,6 +63,11 @@ class _PlayPageState extends State<PlayPage> {
   bool isCurrentPlayerWidget = true;
   bool isWinnerWidget = true;
   bool isTipWidget = true;
+  bool isOneColor = true;
+  bool separateCustomGame = false;
+
+  var winner = "-";
+
   int whitePieces = 0, blackPieces = 0;
   final List<bool> selectedPlayer= <bool>[true, false];
 
@@ -77,6 +82,8 @@ class _PlayPageState extends State<PlayPage> {
       super.initState();
     }
     else {
+
+      print(winner);
 
       for(int i=0; i < gameTable.numberOfRows; i++)
         {
@@ -101,6 +108,14 @@ class _PlayPageState extends State<PlayPage> {
         isCurrentPlayerWidget = false;
         isWinnerWidget = false;
         isTipWidget = false;
+        isMatchFinished = true;
+      }
+      if(whitePieces == 0 && blackPieces != 0) {
+        isOneColor = true;
+      }
+
+      if(whitePieces != 0 && blackPieces == 0) {
+        isOneColor = true;
       }
     }
 
@@ -172,11 +187,11 @@ class _PlayPageState extends State<PlayPage> {
 
           buildWinnerWidget(),
           const SizedBox(width: 100),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[buildCurrentPlayerTurn()],),
+          winner == "-" ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[buildCurrentPlayerTurn()],) : const SizedBox(height: 10),
           buildEmptyBoardWidget(),
 
-          const SizedBox(width: 100, height: 10),
+          const SizedBox(width: 100, height: 7),
           buildSelectCurrentPlayer(),
           const SizedBox(width: 100, height: 20),
           buildStartMatchButton(),
@@ -197,7 +212,7 @@ class _PlayPageState extends State<PlayPage> {
             ),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
-            const Color(0xff7e6c62),
+            const Color.fromRGBO(238,222,189, 1),
           ),
         ),
         onPressed: () => {startMatch()},
@@ -302,12 +317,14 @@ class _PlayPageState extends State<PlayPage> {
           );
 
       if (men.player == gameTable.currentPlayer) {
+
         menWidget = Draggable<Checker>(
             feedback: menWidget,
             childWhenDragging: Container(),
             data: men,
             onDragStarted: () {
               setState(() {
+                isMatchStarted = true;
                 gameTable.highlightPossibleMoves(men, type: modeWalking);
               });
             },
@@ -391,8 +408,13 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   Widget buildCurrentPlayerTurn() {
+
+    print(isMatchFinished);
+    print(isMatchStarted);
+
+
     return Visibility(
-      visible: (isMatchStarted || !custom),
+      visible: ((custom && isMatchStarted)  ||  (!custom && isMatchFinished) || (!custom && separateCustomGame && !isMatchFinished)),
       child: SizedBox(
         width: 360,
         height: 70,
@@ -428,54 +450,95 @@ class _PlayPageState extends State<PlayPage> {
 
   buildWinnerWidget() {
 
-    var winner = "-";
+    if(whitePieces == 0 && blackPieces != 0) {
+      isOneColor = true;
+    }
+
+    if(whitePieces != 0 && blackPieces == 0) {
+      isOneColor = true;
+    }
+
     if (gameTable.checkWinner() == 1) {
       winner = "White";
     } else if (gameTable.checkWinner() == 2) {
       winner = "Black";
     }
 
+    isMatchFinished = true;
     // winner = winner.toUpperCase();
 
-    return (gameTable.checkWinner() != 0 && isWinnerWidget && ((isMatchStarted && custom) || !custom)) ? Card(
-
-        color: const Color(0xff7e6c62),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
-        ),
-        elevation: 1,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          Text(
-            "WINNER: $winner ",
-            style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(width: 10, height: 75),
-          Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(150),
-                  color: const Color.fromRGBO(238,222,189, 1)
+    return (gameTable.checkWinner() != 0 && isWinnerWidget && ((isMatchStarted && custom) || !custom)) ? Column(
+            children: [
+              SizedBox(
+                height: 70,
+                child: Card(
+                  color: const Color.fromRGBO(255, 255, 255, 1.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Image.asset(
+                            "images/the-end.png",
+                            scale: 2,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 25, top: 10),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "   $winner won! ",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              child: Padding(padding: const EdgeInsets.all(3),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => const Play(custom: false, responseMatrix: [[]],)),
-                      );
-                    },
-                    child: const Text("Play again", style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold)),)
+              const SizedBox(width: 30, height: 50),
+              Container(
+                  width: 350,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(150),
+                      color: const Color.fromRGBO(238, 222, 189, 1.0)
+                  ),
+                  child: Padding(padding: const EdgeInsets.all(3),
+                      child: TextButton(
+                        onPressed: () {
+                          isMatchFinished = false;
+                          isMatchStarted = true;
+                          separateCustomGame = true;
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                const Play(custom: false, responseMatrix: [[]],)),
+                          );
+                        },
+                        child: const Text("Play Again!", style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold)),)
+                  )
               )
-          )
-        ])
-    ) : const SizedBox(width: 1.0, height: 1.0);
+            ]) : const SizedBox(width: 1.0, height: 1.0);
   }
 
   buildMenWidget({int player = 1, bool isKing = false, double size = 32}) {
@@ -507,6 +570,7 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   void startMatch() {
+    isMatchFinished = false;
     isMatchStarted = true;
     setState(() {
     });
@@ -523,7 +587,7 @@ class _PlayPageState extends State<PlayPage> {
       visible: (custom && !isMatchStarted && isCurrentPlayerWidget),
       child: Container(
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(238, 222, 189, 1.0),
+          color: Color.fromRGBO(252, 252, 252, 1.0),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         child: ToggleButtons(
@@ -542,8 +606,8 @@ class _PlayPageState extends State<PlayPage> {
               }
             });
           },
-          selectedBorderColor: Color.fromRGBO(238, 222, 189, 1.0),
-          selectedColor:  Colors.grey,
+          selectedBorderColor: Color(0xFFFFFFFF),
+          selectedColor:  Color(0xFF7e6c62),
           fillColor:  Colors.black54,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           isSelected: selectedPlayer,
@@ -564,46 +628,78 @@ class _PlayPageState extends State<PlayPage> {
 
     return Visibility(
       visible: isEmpty,
-      child: Card(
-          color: const Color(0xff7e6c62),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          elevation: 1,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            const Text(
-              "Empty checkerboard!\n  There is no winner!",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
+      child: Column(
+        children: [Visibility(
+        visible: isEmpty,
+        child: SizedBox(
+          height: 90,
+          child: Card(
+            color: const Color.fromRGBO(255, 255, 255, 1.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
             ),
-            const SizedBox(width: 10, height: 75),
-            Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(150),
-                    color: const Color.fromRGBO(238, 222, 189, 1.0)
-                ),
-                child: Padding(padding: const EdgeInsets.all(3),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                              const Play(custom: false, responseMatrix: [[]],)),
-                        );
-                      },
-                      child: const Text("Play again", style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold)),)
-                )
-            )
-          ])
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset(
+                      "images/the-end.png",
+                      scale: 2,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5, top: 13),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "   Empty Chessboard! \n        No Winner!",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
-    );
+                const SizedBox(width: 30, height: 50),
+                Container(
+                    width: 350,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(150),
+                        color: const Color.fromRGBO(238, 222, 189, 1.0)
+                    ),
+                    child: Padding(padding: const EdgeInsets.all(3),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  const Play(custom: false, responseMatrix: [[]],)),
+                            );
+                          },
+                          child: const Text("Play Again!", style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold)),)
+                    )
+                )
+              ])
+      );
   }
 
   buildPlayingSuggestionWidget() {

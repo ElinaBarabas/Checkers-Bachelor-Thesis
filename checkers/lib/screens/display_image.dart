@@ -57,8 +57,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
 
 
-    // final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
-    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.88.233:50100/upload"));    //ASTA E LOCAL
+    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
     // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL LA FACULTATE
 
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
@@ -90,9 +89,12 @@ class DisplayPictureScreen extends StatelessWidget {
     }
   }
 
-  Future<void> saveImage() async{
+  Future<void> saveImage(BuildContext context) async{
 
     await GallerySaver.saveImage(imagePath);
+    showSaveImageAlertDialog(context);
+
+
   }
 
   Future<void> uploadImage(BuildContext context) async {
@@ -169,7 +171,7 @@ class DisplayPictureScreen extends StatelessWidget {
                               const Color.fromRGBO(238, 222, 189, 1.0),
                             ),
                           ),
-                          onPressed: () => {   Navigator.pop(context), saveImage()},
+                          onPressed: () => { saveImage(context)},
                           child: const Text(
                             "Save picture",
                             style: TextStyle(color: Colors.black),
@@ -269,7 +271,7 @@ class DisplayPictureScreen extends StatelessWidget {
   showAlertDialog(BuildContext context) {
 
     Widget retakePictureButton = Padding(
-      padding: const EdgeInsets.only(right: 5, bottom: 5),
+      padding: const EdgeInsets.only(right: 5),
       child: TextButton(
         child: const Text("Choose another picture", style: TextStyle(color: Color(
             0xff070000), fontSize: 15, fontWeight: FontWeight.bold)),
@@ -282,22 +284,56 @@ class DisplayPictureScreen extends StatelessWidget {
     );
 
     // set up the AlertDialog
+    // set up the AlertDialog
+    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),
       ),
       backgroundColor: const Color.fromRGBO(238, 222, 189, 1.0),
-      content: const Padding(
-        padding: EdgeInsets.only(top: 25.0),
-        child: Text("No checkerboard could be detected!", textAlign: TextAlign.center, style: TextStyle(
-            color: Colors.black,
-            fontSize: 20)),
+      content:  Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: SizedBox(
+          height: 60,
+          width: 400,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Image.asset(
+                  "images/search.png",
+                  scale: 2,
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Couldn't detect any chessboard!",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       actions: [
         retakePictureButton,
       ],
     );
+
 
     // show the dialog
     showDialog(
@@ -414,6 +450,78 @@ class DisplayPictureScreen extends StatelessWidget {
       ),
       actions: [
         noInternetConnectionButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showSaveImageAlertDialog(BuildContext context) {
+
+    Widget okPictureButton = Padding(
+      padding: const EdgeInsets.only(right: 5),
+      child: TextButton(
+        child: const Text("OK!", style: TextStyle(color: Color(
+            0xff070000), fontSize: 12, fontWeight: FontWeight.bold)),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+
+    // set up the AlertDialog
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40),
+      ),
+      backgroundColor: const Color.fromRGBO(238, 222, 189, 1.0),
+      content:  Padding(
+        padding: const EdgeInsets.only(top: 45),
+        child: SizedBox(
+          height: 50,
+          width: 350,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Image.asset(
+                  "images/image.png",
+                  scale: 2,
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Image saved successfully!",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        okPictureButton,
       ],
     );
 

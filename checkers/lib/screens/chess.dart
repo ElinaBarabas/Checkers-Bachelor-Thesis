@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'chess_logic/chess_board.dart';
-import 'chess_logic/chess_board_controller.dart';
-import 'chess_logic/constants.dart';
+
+import '../chess_logic/chess_board.dart';
+import '../chess_logic/chess_board_controller.dart';
+import '../chess_logic/constants.dart';
+
 
 class ChessScreen extends StatefulWidget {
   const ChessScreen({Key? key}) : super(key: key);
