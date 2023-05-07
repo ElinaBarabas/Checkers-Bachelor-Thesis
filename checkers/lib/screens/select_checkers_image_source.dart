@@ -7,15 +7,15 @@ import 'package:image_picker/image_picker.dart';
 import 'display_image.dart';
 
 
-class SelectImageSource extends StatefulWidget {
-  const SelectImageSource({super.key});
+class SelectCheckersImageSource extends StatefulWidget {
+  const SelectCheckersImageSource({super.key});
 
 
   @override
-  State<SelectImageSource> createState() => _SelectImageSourceState();
+  State<SelectCheckersImageSource> createState() => _SelectCheckersImageSourceState();
 }
 
-class _SelectImageSourceState extends State<SelectImageSource> {
+class _SelectCheckersImageSourceState extends State<SelectCheckersImageSource> {
 
 
   // @override
@@ -27,45 +27,49 @@ class _SelectImageSourceState extends State<SelectImageSource> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-          _backgroundImage(),
-          Padding(
-            padding: const EdgeInsets.only(top: 40, left: 15),
-            child: IconButton(
-              icon: Image.asset('images/back.png'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+        backgroundColor: const Color(0xFF211810),
+        
+        body: SingleChildScrollView(
+          child: Stack(children: [
+            _backgroundImage(),
+            Padding(
+              padding: const EdgeInsets.only(top: 40, left: 15),
+              child: IconButton(
+                icon: Image.asset('images/back.png'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-          ),
-          Column(
-            children: [
-              const SizedBox(
-                height: 90,
-              ),
-              _headerView(),
-              const SizedBox(
-                height: 30,
-              ),
-
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  children: [
-                    _cardDetailView("images/camera.png", "camera",
-                        "Take Picture"),
-                    const SizedBox(height: 50),
-                    _cardDetailView("images/upload.png", "upload",
-                        "Upload from Gallery"),
-                  ],
+            Column(
+              children: [
+                const SizedBox(
+                  height: 90,
                 ),
-              ),
+                _headerView(),
+                const SizedBox(
+                  height: 30,
+                ),
 
-            ],
-          ),
-          // _bottomView(context),
-        ]));
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      _cardDetailView("images/camera.png", "camera",
+                          "Take Picture"),
+                      const SizedBox(height: 50),
+                      _cardDetailView("images/upload.png", "upload",
+                          "Upload from Gallery"),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+            // _bottomView(context),
+          ]),
+        ));
   }
 
   Widget _backgroundImage() {
@@ -76,7 +80,7 @@ class _SelectImageSourceState extends State<SelectImageSource> {
 
   Widget _headerView() {
     return Padding(
-      padding: const EdgeInsets.all(40.0),
+      padding: const EdgeInsets.all(35.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,10 +94,10 @@ class _SelectImageSourceState extends State<SelectImageSource> {
                 children: const [
 
                   Text(
-                    "Select the source of the game match image that will be converted",
+                    "Select the Checkers match that you want to virtualize:",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 19,
                     ),
                   ),
                 ],

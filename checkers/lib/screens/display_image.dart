@@ -119,150 +119,152 @@ class DisplayPictureScreen extends StatelessWidget {
         // appBar: AppBar(backgroundColor: const Color(0xFF2C2623), title: const Text('Display the Picture')),
         // The image is stored as a file on the device. Use the `Image.file`
         // constructor with the given path to display the image.
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        icon: Image.asset('images/back.png'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                    ),
-                    SizedBox(width: 5,),
-                    Visibility(
-                      visible: isButtonVisible,
-                      child: Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                )
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromRGBO(238, 222, 189, 1.0),
-                            ),
-                          ),
-                          onPressed: () => {uploadImage(context)},
-                          child: const Text(
-                            "Upload picture",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          icon: Image.asset('images/back.png'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                       ),
-                    ),
-                    Visibility(
-                      visible: !isButtonVisible,
-                      child: Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                )
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromRGBO(238, 222, 189, 1.0),
-                            ),
-                          ),
-                          onPressed: () => { saveImage(context)},
-                          child: const Text(
-                            "Save picture",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Visibility(
-                      visible: isButtonVisible,
-                      child: Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40),
+                      SizedBox(width: 5,height: 100,),
+                      Visibility(
+                        visible: isButtonVisible,
+                        child: Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40),
+                                  )
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color.fromRGBO(238, 222, 189, 1.0),
                               ),
                             ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromRGBO(238, 222, 189, 1.0),
+                            onPressed: () => {uploadImage(context)},
+                            child: const Text(
+                              "Upload picture",
+                              style: TextStyle(color: Colors.black),
                             ),
-                          ),
-                          onPressed: () => { Navigator.pop(context),
-                          Navigator.of(context).pushNamed("/camera")},
-                          child: const Text(
-                            "Retake picture",
-                            style: TextStyle(color: Colors.black),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15.0),
-                Image.file(File(imagePath)),
-                const SizedBox(height: 15.0),
-                GestureDetector(
-                    onTap: ()  async {
-                      var activeConnection = await checkUserConnection();
+                      Visibility(
+                        visible: !isButtonVisible,
+                        child: Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40),
+                                  )
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color.fromRGBO(238, 222, 189, 1.0),
+                              ),
+                            ),
+                            onPressed: () => { saveImage(context)},
+                            child: const Text(
+                              "Save picture",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Visibility(
+                        visible: isButtonVisible,
+                        child: Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color.fromRGBO(238, 222, 189, 1.0),
+                              ),
+                            ),
+                            onPressed: () => { Navigator.pop(context),
+                            Navigator.of(context).pushNamed("/camera")},
+                            child: const Text(
+                              "Retake picture",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15.0),
+                  Image.file(File(imagePath)),
+                  const SizedBox(height: 15.0),
+                  GestureDetector(
+                      onTap: ()  async {
+                        var activeConnection = await checkUserConnection();
 
-                      if(activeConnection == false) {
-                        showConnectionAlertDialog(context);
-                      }
-                      else {
-                        // buildFetchDataWidget(context);
-                        sendImageToServer(context);
-                      }
-                    },
-                    child:
-                    Card(
-                      color: const Color.fromRGBO(238, 222, 189, 1.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Image.asset(
-                                "images/play.png",
-                                scale: 7,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 30.0),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: const [
-                                      Text(
-                                        "Let's play virtually!",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                            )
-                          ],
+                        if(activeConnection == false) {
+                          showConnectionAlertDialog(context);
+                        }
+                        else {
+                          // buildFetchDataWidget(context);
+                          sendImageToServer(context);
+                        }
+                      },
+                      child:
+                      Card(
+                        color: const Color.fromRGBO(238, 222, 189, 1.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
                         ),
-                      ),
-                    )),
-                const SizedBox(height: 15.0),
-              ]
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 35.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Image.asset(
+                                  "images/play.png",
+                                  scale: 7,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 30.0),
+                                  child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Let's play virtually!",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )),
+                  const SizedBox(height: 15.0),
+                ]
+            ),
           ),
         )
     );
@@ -283,9 +285,7 @@ class DisplayPictureScreen extends StatelessWidget {
       ),
     );
 
-    // set up the AlertDialog
-    // set up the AlertDialog
-    // set up the AlertDialog
+
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),

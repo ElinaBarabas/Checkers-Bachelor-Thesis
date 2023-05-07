@@ -48,7 +48,9 @@ class _HomepageState extends State<Homepage> {
                       _cardDetailView("images/checker-board.png", "Checkers",
                       "Play from scratch"),
                       _cardDetailView("images/qr-code.png", "Scan",
-                          "Virtualize the physical match"),
+                          "Virtualize the Checkers physical match"),
+                      _cardDetailView("images/game.png", "Chessify",
+                          "Play Chess from a custom configuration"),
                       _cardDetailView("images/rules.png", "Rules",
                           "How to play Checkers"),
 

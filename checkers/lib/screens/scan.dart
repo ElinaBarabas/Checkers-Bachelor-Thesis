@@ -65,150 +65,152 @@ class ScanState extends State<Scan> {
       // You must wait until the controller is initialized before displaying the
       // camera preview. Use a FutureBuilder to display a loading spinner until the
       // controller has finished initializing.
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview.
-            return Column(
-              children: [
-                // const SizedBox(width: 300, height: 30),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 300),
-                  child: IconButton(
-                    icon: Image.asset('images/back.png'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                Card(
-                  color: const Color.fromRGBO(255, 255, 255, 1.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Image.asset(
-                            "images/checkers3.png",
-                            scale: 2,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 25.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "Aim your camera at the checkerboard to scan it and convert it into a playable game!",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        )
-                      ],
+      body: SingleChildScrollView(
+        child: FutureBuilder<void>(
+          future: _initializeControllerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              // If the Future is complete, display the preview.
+              return Column(
+                children: [
+                  // const SizedBox(width: 300, height: 30),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 300),
+                    child: IconButton(
+                      icon: Image.asset('images/back.png'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
-                ),
-                const SizedBox(width: 300, height: 5),
-                Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 300,
-                      child: CameraPreview(_controller),
-                    )),
-                const SizedBox(width: 300, height: 5),
-                GestureDetector(
-                    onTap: () async {
-                      // Take the Picture in a try / catch block. If anything goes wrong,
-                      // catch the error.
-                      try {
-                        // Ensure that the camera is initialized.
-                        await _initializeControllerFuture;
-
-                        // Attempt to take a picture and get the file `image`
-                        // where it was saved.
-                        final image = await _controller.takePicture();
-
-                        if (!mounted) return;
-
-                        // If the picture was taken, display it on a new screen.
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DisplayPictureScreen(
-                              // Pass the automatically generated path to
-                              // the DisplayPictureScreen widget.
-                              imagePath: image.path, isButtonVisible: false,
+                  Card(
+                    color: const Color.fromRGBO(255, 255, 255, 1.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Image.asset(
+                              "images/checkers3.png",
+                              scale: 2,
                             ),
                           ),
-                        );
-                      } catch (e) {
-                        // If an error occurs, log the error to the console.
-                        if (kDebugMode) {
-                          print(e);
-                        }
-                      }
-                    },
-                    child:
-                    Card(
-                      color: const Color.fromRGBO(238, 222, 189, 1.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
+                          Expanded(
+                            flex: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 25.0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      "Aim your camera at the checkerboard to scan it and convert it into a playable game!",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          )
+                        ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 50.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Image.asset(
-                                "images/scan.png",
-                                scale: 12,
+                    ),
+                  ),
+                  const SizedBox(width: 300, height: 5),
+                  Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height - 300,
+                        child: CameraPreview(_controller),
+                      )),
+                  const SizedBox(width: 300, height: 5),
+                  GestureDetector(
+                      onTap: () async {
+                        // Take the Picture in a try / catch block. If anything goes wrong,
+                        // catch the error.
+                        try {
+                          // Ensure that the camera is initialized.
+                          await _initializeControllerFuture;
+
+                          // Attempt to take a picture and get the file `image`
+                          // where it was saved.
+                          final image = await _controller.takePicture();
+
+                          if (!mounted) return;
+
+                          // If the picture was taken, display it on a new screen.
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DisplayPictureScreen(
+                                // Pass the automatically generated path to
+                                // the DisplayPictureScreen widget.
+                                imagePath: image.path, isButtonVisible: false,
                               ),
                             ),
-                            Expanded(
-                              flex: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 40.0),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: const [
-                                      Text(
-                                        "Convert game!",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                            )
-                          ],
+                          );
+                        } catch (e) {
+                          // If an error occurs, log the error to the console.
+                          if (kDebugMode) {
+                            print(e);
+                          }
+                        }
+                      },
+                      child:
+                      Card(
+                        color: const Color.fromRGBO(238, 222, 189, 1.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
                         ),
-                      ),
-                    )),
-              ],
-            );
-          } else {
-            // Otherwise, display a loading indicator.
-            return const Center(child: CircularProgressIndicator());
-          }
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 50.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Image.asset(
+                                  "images/exchange.png",
+                                  scale: 12,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 40.0),
+                                  child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Convert game!",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )),
+                ],
+              );
+            } else {
+              // Otherwise, display a loading indicator.
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        },
+          },
+        ),
       ),
     );
   }

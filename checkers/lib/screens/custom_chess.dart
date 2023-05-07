@@ -5,14 +5,15 @@ import '../chess_logic/chess_board_controller.dart';
 import '../chess_logic/constants.dart';
 
 
-class ChessScreen extends StatefulWidget {
-  const ChessScreen({Key? key}) : super(key: key);
+class CustomChessScreen extends StatefulWidget {
+  const CustomChessScreen({Key? key, required this.fenString}) : super(key: key);
+  final String fenString;
 
   @override
-  _ChessScreenState createState() => _ChessScreenState();
+  _CustomChessScreenState createState() => _CustomChessScreenState();
 }
 
-class _ChessScreenState extends State<ChessScreen> {
+class _CustomChessScreenState extends State<CustomChessScreen> {
   ChessBoardController controller = ChessBoardController();
   late bool isCheck = false;
   late bool isMate = false;
@@ -21,6 +22,9 @@ class _ChessScreenState extends State<ChessScreen> {
 
   @override
   void initState() {
+    //4k2r/6r1/8/8/8/8/3R4/R3K3 b Qk - 0 1
+    controller.loadFen(widget.fenString);
+
     super.initState();
     controller.addListener(_onControllerChanged);
   }
@@ -61,64 +65,62 @@ class _ChessScreenState extends State<ChessScreen> {
         ),
         backgroundColor: const Color(0xFF211810),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Card(
-              color: const Color.fromRGBO(255, 255, 255, 1.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Image.asset(
-                        "images/drag.png",
-                        scale: 3,
-                      ),
+      body: Column(
+        children: [
+          Card(
+            color: const Color.fromRGBO(255, 255, 255, 1.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            elevation: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Image.asset(
+                      "images/drag.png",
+                      scale: 3,
                     ),
-                    Expanded(
-                      flex: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "For making a move, you must drag a piece to the field on which you want to place it.",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 25.0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "For making a move, you must drag a piece to the field on which you want to place it.",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
                               ),
-                            ]),
-                      ),
-                    )
-                  ],
-                ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
               ),
             ),
-            const SizedBox(height: 5),
-            Center(
-              child: ChessBoard(
-                controller: controller,
-                boardColor: BoardColor.darkBrown,
-                boardOrientation: PlayerColor.white,
-              ),
+          ),
+          const SizedBox(height: 5),
+          Center(
+            child: ChessBoard(
+              controller: controller,
+              boardColor: BoardColor.darkBrown,
+              boardOrientation: PlayerColor.white,
             ),
-            SizedBox(height: 5),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[buildCurrentPlayerWidget()],),
-            buildCheckWidget(),
+          ),
+          SizedBox(height: 5),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[buildCurrentPlayerWidget()],),
+          buildCheckWidget(),
 
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -187,19 +189,19 @@ class _ChessScreenState extends State<ChessScreen> {
     final color = player == "Color.BLACK" ? Colors.black : Colors.grey[100];
 
     return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black45,
-            offset: Offset(0, 4),
-            blurRadius: 4,
-          ),
-        ],
-        color: color,
-      )
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black45,
+              offset: Offset(0, 4),
+              blurRadius: 4,
+            ),
+          ],
+          color: color,
+        )
     );
   }
 

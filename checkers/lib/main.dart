@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:checkers/checkerboard_field.dart';
 import 'package:checkers/screens/chess.dart';
+import 'package:checkers/screens/chessify.dart';
+import 'package:checkers/screens/custom_chess.dart';
 import 'package:checkers/screens/play.dart';
 import 'package:checkers/screens/rules.dart';
 import 'package:checkers/screens/scan.dart';
-import 'package:checkers/screens/select_image_source.dart';
+import 'package:checkers/screens/select_checkers_image_source.dart';
 import 'package:flutter/material.dart';
 
 import 'checker.dart';
@@ -44,11 +46,12 @@ Future<void> main() async {
       routes: {
         '/': (context) => const Homepage(),
         // '/scan': (context) => Scan(camera: firstCamera),
-        '/scan': (context) => const SelectImageSource(),
+        '/scan': (context) => const SelectCheckersImageSource(),
         '/camera': (context) => Scan(camera: firstCamera),
         '/checkers': (context) => const Play(custom: false, responseMatrix: [[]]),
         '/rules': (context) => const Rules(),
         '/chess': (context) => const ChessScreen(),
+        '/chessify': (context) => const SelectChessMatchSource(),
       }
   ));
 

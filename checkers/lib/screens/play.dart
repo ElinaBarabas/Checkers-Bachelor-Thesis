@@ -721,7 +721,7 @@ class _PlayPageState extends State<PlayPage> {
               Expanded(
                 flex: 1,
                 child: Image.asset(
-                  "images/drag.png",
+                  "images/tap.png",
                   scale: 2,
                 ),
               ),
