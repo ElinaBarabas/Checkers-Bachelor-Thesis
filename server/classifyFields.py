@@ -10,8 +10,7 @@ from keras.utils import load_img, img_to_array, plot_model
 
 def classifyFields(newPath):
 
-    model = load_model("../server/4labels+wfieldsaug.h5")
-    # model = load_model("../server/4labels+BWfieldsaug.h5")
+    model = load_model("4labels+wfieldsaug.h5")
 
     untested_fields = os.listdir(newPath)
 
@@ -19,8 +18,6 @@ def classifyFields(newPath):
         resultString = "NOT FOUND"
 
     else:
-        resultString = "aici ramane"
-        print("FISIERE IN FOLDER " + str(len(untested_fields)))
 
         result_matrix = [['e' for _ in range(8)] for _ in range(8)]
 

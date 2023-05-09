@@ -16,6 +16,7 @@ class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   final bool isButtonVisible;
 
+
   const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
 
 
@@ -57,8 +58,10 @@ class DisplayPictureScreen extends StatelessWidget {
 
 
 
-    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL
+    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL CARE MERGE
+
     // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL LA FACULTATE
+
 
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
     final headers = {"Content-type": "multipart/form-data"};

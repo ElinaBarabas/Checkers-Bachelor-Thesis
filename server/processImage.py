@@ -40,11 +40,11 @@ def split_into_checkerboard_fields(filename, newPath):
 
     filename_without_extension = filename.split(".")[0]
 
-    # gray_checkerboard_image = cv2.cvtColor(checkerboard_image, cv2.COLOR_BGR2GRAY)
+    gray_checkerboard_image = cv2.cvtColor(checkerboard_image, cv2.COLOR_BGR2GRAY)
 
     pattern_size = (7, 7)  # the number of INNER corners of the initial checkerboard (49)
 
-    found, corners = cv2.findChessboardCorners(checkerboard_image, pattern_size)
+    found, corners = cv2.findChessboardCorners(gray_checkerboard_image, pattern_size)
 
     if found:
         print("HERE IS FOUND")

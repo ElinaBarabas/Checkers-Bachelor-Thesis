@@ -60,11 +60,10 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
                     children: [
                       isPastePressed ? showFENInputWidget() :  _cardDetailView("images/paste.png", "paste",
                           "Start from FEN (Forsyth-Edwards Notation)"),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      // _cardDetailView("images/upload.png", "upload",
-                      //     "Upload from Gallery "),
+                      _cardDetailView("images/upload.png", "upload",
+                          "Upload from Gallery "),
+                      _cardDetailView("images/camera.png", "camera",
+                          "Take Picture"),
                     ],
                   ),
                 ),
@@ -118,13 +117,19 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
     return GestureDetector(
 
         onTap: () {
-          // var navigation = "/${title.toLowerCase()}";
+          var navigation = "/${title.toLowerCase()}";
           if(title.toLowerCase() == "paste")
             {
               isPastePressed = true;
               setState(() {});
-
             }
+          else if (navigation == "/camera") {
+            Navigator.of(context).pushNamed(navigation);
+          }
+          else {
+            print("UPLOAD");
+            uploadImage();
+          }
         },
         child:
         Card(
