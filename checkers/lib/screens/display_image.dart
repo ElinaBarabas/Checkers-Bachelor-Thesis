@@ -25,6 +25,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
   sendImageToServer(BuildContext context) async {
 
+    var isTimeout = false;
     var isResponseRetrieved =  false;
 
     showDialog(
@@ -72,8 +73,8 @@ class DisplayPictureScreen extends StatelessWidget {
 
     // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL LA FACULTATE
 
-
     // final request = http.MultipartRequest("POST", Uri.parse("https://checkers-scanner.onrender.com/upload"));
+
     final headers = {"Content-type": "multipart/form-data"};
 
     var selectedImage = File(imagePath);
@@ -82,7 +83,13 @@ class DisplayPictureScreen extends StatelessWidget {
         selectedImage.lengthSync(), filename: selectedImage.path.split("/").last));
 
     request.headers.addAll(headers);
-    final response = await request.send().timeout(const Duration(seconds: 100));
+    final response = await request.send().timeout(
+      const Duration(seconds: 100),
+      onTimeout: () {
+        isTimeout = true;
+        throw TimeoutException("The request timed out.");
+      },
+    );
 
     http.Response res = await http.Response.fromStream(response);
     isResponseRetrieved = true;

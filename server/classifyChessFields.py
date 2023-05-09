@@ -54,12 +54,12 @@ def convert_matrix_to_fen(matrix):
 
 
 def classifyChessFields():
-    model = load_model("chessify-3.h5")
+    model = load_model("chessify-2.h5")
 
     untested_fields = os.listdir("output-chessify")
 
     print(len(untested_fields))
-    result_matrix = [['.' for _ in range(8)] for _ in range(8)]
+    result_matrix = [['..' for _ in range(8)] for _ in range(8)]
 
     i = 0
 
@@ -100,6 +100,7 @@ def classifyChessFields():
 
         result_matrix[int(row)][int(column)] = piece_label
 
+    print(result_matrix)
     result_matrix = convert_chars(result_matrix)
     fen_string = convert_matrix_to_fen(result_matrix)
 

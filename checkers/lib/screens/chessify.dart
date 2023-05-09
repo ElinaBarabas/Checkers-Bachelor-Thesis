@@ -141,18 +141,19 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
             borderRadius: BorderRadius.circular(40),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 35, bottom: 35, right: 12),
+            padding: const EdgeInsets.only(left: 30.0, top: 25, bottom: 25, right: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
+                  flex: 2,
                   child: Image.asset(
                     imagePath,
-                    scale: 4,
+                    scale: 2,
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 7,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0),
                     child: Column(

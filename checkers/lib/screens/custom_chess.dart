@@ -84,10 +84,10 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
       body: Column(
         children: [
           error != "" ? buildErrorWidget() : const SizedBox(width: 1 ,),
-          error == "" && !isInvalid ? buildMovingSuggestionWidget() : const SizedBox(width: 1,height: 50,),
+          error == "" && !isInvalid ? buildMovingSuggestionWidget() : const SizedBox(width: 1,height: 1,),
           // (!canStart && !widget.isPasted) ? showAlertDialog(context) : SizedBox(width: 1,),
           const SizedBox(height: 5),
-          (!widget.isPasted && isSelectPlayerDisplayed && error == "") ? buildSelectCurrentPlayer() : const SizedBox(width: 1,),
+          (!widget.isPasted && isSelectPlayerDisplayed && error == "") ? buildSelectCurrentPlayer() : const SizedBox(width: 1, height: 1,),
           const SizedBox(height: 5),
 
           GestureDetector(
@@ -473,15 +473,15 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
         ),
         elevation: 2,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 flex: 2,
                 child: Image.asset(
-                  "images/king.png",
-                  scale: 2,
+                  "images/cross.png",
+                  scale: 5,
                 ),
               ),
               Expanded(
