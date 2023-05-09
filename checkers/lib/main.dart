@@ -47,9 +47,8 @@ Future<void> main() async {
         '/': (context) => const Homepage(),
         // '/scan': (context) => Scan(camera: firstCamera),
         '/scan': (context) => const SelectCheckersImageSource(),
-        '/camera': (context) => Scan(camera: firstCamera),
-
-
+        '/camera': (context) => Scan(camera: firstCamera, mustChangeToChess: false,),
+        '/camera_chess': (context) => Scan(camera: firstCamera, mustChangeToChess: true,),
         '/checkers': (context) => const Play(custom: false, responseMatrix: [[]]),
         '/rules': (context) => const Rules(),
         '/chess': (context) => const ChessScreen(),

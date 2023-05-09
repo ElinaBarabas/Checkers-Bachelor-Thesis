@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 import '../chess_logic/chess_board.dart';
 import '../chess_logic/chess_board_controller.dart';
@@ -6,8 +7,9 @@ import '../chess_logic/constants.dart';
 
 
 class CustomChessScreen extends StatefulWidget {
-  const CustomChessScreen({Key? key, required this.fenString}) : super(key: key);
+  const CustomChessScreen({Key? key, required this.fenString, required this.isPasted}) : super(key: key);
   final String fenString;
+  final bool isPasted;
 
   @override
   _CustomChessScreenState createState() => _CustomChessScreenState();
@@ -19,9 +21,13 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
   late bool isMate = false;
   late bool isStaleMate = false;
   late bool isDraw = false;
+  late bool canStart = false;
+
+  final List<bool> selectedPlayer= <bool>[false, false];
 
   @override
   void initState() {
+
     //4k2r/6r1/8/8/8/8/3R4/R3K3 b Qk - 0 1
     controller.loadFen(widget.fenString);
 
@@ -94,10 +100,11 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              "For making a move, you must drag a piece to the field on which you want to place it.",
+                              "Before starting the game, choose whose turn is! \n"
+                                  "For making a move, you must drag a piece to the field on which you want to place it.",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 15,
                               ),
                             ),
                           ]),
@@ -107,7 +114,10 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
               ),
             ),
           ),
+          // (!canStart && !widget.isPasted) ? showAlertDialog(context) : SizedBox(width: 1,),
           const SizedBox(height: 5),
+          (!widget.isPasted) ? buildSelectCurrentPlayer() : const SizedBox(width: 1,),
+
           Center(
             child: ChessBoard(
               controller: controller,
@@ -410,6 +420,50 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
       );
     }
   }
+  Widget buildSelectCurrentPlayer() {
+
+    const List<Widget> players = <Widget>[
+      Text('   Black   ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+      Text('   White   ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))
+    ];
+
+    return Visibility(
+      visible: !canStart,
+      child: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xffb2a59b),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          child: ToggleButtons(
+            onPressed: (int index) {
+              setState(() {
+                // The button that is tapped is set to true, and the others to false.
+                for (int i = 0; i < selectedPlayer.length; i++) {
+                  selectedPlayer[i] = i == index;
+
+                  if(index == 0) {;
+                    var my_fen = widget.fenString.replaceFirst("w", "b");
+                    print(my_fen);
+                    controller.loadFen(my_fen);
+                  }
+                  else {
+                    print("alb");
+                  }
+                  canStart = true;
+                }
+              });
+            },
+            selectedBorderColor: Color(0xFFFFFFFF),
+            selectedColor:  Color(0xFF7e6c62),
+            fillColor:  Colors.black54,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            isSelected: selectedPlayer,
+            children: players,
+          ),
+        ),
+    );
+  }
+
 
 }
 

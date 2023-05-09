@@ -45,8 +45,12 @@ def convert_matrix_to_fen(matrix):
             empty_count = 0
         fen += '/'
 
-    print(fen[:-1])
-    return fen[:-1]
+    fen = fen[:-1] + " w KQkq - 0 1"
+
+    # fen = "8/8/3K4/8/8/4P3/7k/8 w KQkq - 0 1"
+
+    print(fen)
+    return fen
 
 
 def classifyChessFields():

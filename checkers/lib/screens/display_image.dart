@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -12,12 +13,14 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
+import 'custom_chess.dart';
+
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   final bool isButtonVisible;
+  final bool isCheckers;
 
-
-  const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible});
+  const DisplayPictureScreen({super.key, required this.imagePath, required this.isButtonVisible, required this.isCheckers});
 
 
   sendImageToServer(BuildContext context) async {
@@ -56,9 +59,16 @@ class DisplayPictureScreen extends StatelessWidget {
 
     // await Future.delayed(const Duration(seconds: 5, milliseconds: 50));
 
+    http.MultipartRequest request;
 
+    if(isCheckers)
+      {
+        request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL CARE MERGE
+      }
+    else {
+      request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/chessify"));    //ASTA E LOCAL CARE MERGE
+    }
 
-    final request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL CARE MERGE
 
     // final request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.212:50100/upload"));    //ASTA E LOCAL LA FACULTATE
 
@@ -87,8 +97,26 @@ class DisplayPictureScreen extends StatelessWidget {
     }
     else {
       Navigator.pop(context);    // we pop the loading alert since the conversion is done
-      List<List<String>> responseMatrix = processResponse(message);
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Play(custom: true, responseMatrix: responseMatrix)));
+
+      if(isCheckers) {
+        List<List<String>> responseMatrix = processResponse(message);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+            Play(custom: true, responseMatrix: responseMatrix)));
+      }
+      else {
+
+        if(!message.split(" ")[0].contains("K") || !message.split(" ")[0].contains("k"))
+          {
+            print("NU e ok");
+            showTwoKingsAlertDialog(context);
+          }
+        else {
+          print(message);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  CustomChessScreen(fenString: message, isPasted: false,)));
+        }
+      }
     }
   }
 
@@ -107,7 +135,7 @@ class DisplayPictureScreen extends StatelessWidget {
     if (selectedImage != null) {
 
        Navigator.pushReplacement(
-           context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: selectedImage.path, isButtonVisible: true)));
+           context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: selectedImage.path, isButtonVisible: true, isCheckers: isCheckers,)));
 
     }
   }
@@ -200,7 +228,11 @@ class DisplayPictureScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () => { Navigator.pop(context),
-                            Navigator.of(context).pushNamed("/camera")},
+                            if(isCheckers)
+                              Navigator.of(context).pushNamed("/camera")
+                            else
+                              Navigator.of(context).pushNamed("/camera_chess")
+                            },
                             child: const Text(
                               "Retake picture",
                               style: TextStyle(color: Colors.black),
@@ -283,7 +315,7 @@ class DisplayPictureScreen extends StatelessWidget {
         onPressed: () {
           Navigator.pop(context);
           Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true)));
+                    context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true, isCheckers: isCheckers,)));
         },
       ),
     );
@@ -525,6 +557,88 @@ class DisplayPictureScreen extends StatelessWidget {
       ),
       actions: [
         okPictureButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showTwoKingsAlertDialog(BuildContext context) {
+
+    Widget noInternetConnectionButton = TextButton(
+      child: const Text(
+        "OK",
+        style: TextStyle(
+          color: Color(0xff000000),
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true, isCheckers: isCheckers,)));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40),
+      ),
+      backgroundColor: const Color.fromRGBO(238, 222, 189, 1.0),
+      content:  Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: Container(
+          height: 70,
+          width: 300,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  "images/search.png",
+                  scale: 4,
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "The Kings could not be detected!",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        "Please try again!",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        noInternetConnectionButton,
       ],
     );
 

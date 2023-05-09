@@ -22,7 +22,9 @@ class SelectChessMatchSource extends StatefulWidget {
 class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
 
   final ChessBoardController chessBoardController = ChessBoardController();
+
   late bool isPastePressed = false;
+
   // @override
   @override
   void initState() {
@@ -124,6 +126,7 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
               setState(() {});
             }
           else if (navigation == "/camera") {
+            navigation += "_chess";
             Navigator.of(context).pushNamed(navigation);
           }
           else {
@@ -250,7 +253,7 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
             builder: (context) => DisplayPictureScreen(
               // Pass the automatically generated path to
               // the DisplayPictureScreen widget.
-              imagePath: imagePath, isButtonVisible: false,
+              imagePath: imagePath, isButtonVisible: false, isCheckers: false,
             ),
           )).then((value) => Navigator.pop(context));
     }
@@ -258,19 +261,20 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
 
   processInput(String fenInput, TextEditingController controller, BuildContext context) {
 
+    fenInput = fenInput.trim();
     if(!chessBoardController.game.load(fenInput))
       {
         showNonValidFenAlert(context);
         controller.text =  "";
-        // fenInput = "";
       }
     else
     {
+
       Navigator.pop(context);
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CustomChessScreen(fenString: fenInput)));
+          builder: (context) => CustomChessScreen(fenString: fenInput, isPasted: true)));
       controller.text =  "";
-      // fenInput = "";
+
     }
   }
 

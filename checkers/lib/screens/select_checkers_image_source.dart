@@ -26,6 +26,7 @@ class _SelectCheckersImageSourceState extends State<SelectCheckersImageSource> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         backgroundColor: const Color(0xFF211810),
         
@@ -178,7 +179,7 @@ class _SelectCheckersImageSourceState extends State<SelectCheckersImageSource> {
             builder: (context) => DisplayPictureScreen(
               // Pass the automatically generated path to
               // the DisplayPictureScreen widget.
-              imagePath: imagePath, isButtonVisible: false,
+              imagePath: imagePath, isButtonVisible: false, isCheckers: true,
             ),
           )).then((value) => Navigator.pop(context));
     }

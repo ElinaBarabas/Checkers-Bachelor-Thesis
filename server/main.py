@@ -22,6 +22,7 @@ limiter = Limiter(
 @app.route('/upload', methods=["POST"])
 def upload():
     if request.method == "POST":
+        print("CHECKERS")
 
         shutil.rmtree("output")
         imageFile = request.files['image']
@@ -43,8 +44,10 @@ def upload():
 def uploadChess():
     if request.method == "POST":
 
-        # if os.path.exists("CHESS/output-chessify"):
-        #     shutil.rmtree("CHESS/output-chessify")
+        print("CHESS")
+
+        if os.path.exists("CHESS/output-chessify"):
+            shutil.rmtree("CHESS/output-chessify")
 
         imageFile = request.files['image']
 

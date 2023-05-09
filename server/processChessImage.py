@@ -73,8 +73,6 @@ def split_into_checkerboard_fields(filename, newPath):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
 
-                print(1)
-
                 cv2.imwrite(
                     os.path.join(f"../server/{newPath}/",
                                  f"chess{filename_without_extension}___r{0}-c{i}.jpg"),
@@ -101,8 +99,6 @@ def split_into_checkerboard_fields(filename, newPath):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
 
-                print(2)
-
                 cv2.imwrite(
                     os.path.join(f"../server/{newPath}/",
                                  f"chess{filename_without_extension}___r{i + 1}-c{0}.jpg"),
@@ -123,7 +119,6 @@ def split_into_checkerboard_fields(filename, newPath):
             shape = f.shape
             if shape[0] > 0 and shape[1] > 0:
 
-                print(3)
                 # Generate the filename using the current row and column numbers
                 filename = f"chess{filename_without_extension}___r{row}-c{column}.jpg"
                 cv2.imwrite(os.path.join(f"../server/{newPath}/", filename), f)

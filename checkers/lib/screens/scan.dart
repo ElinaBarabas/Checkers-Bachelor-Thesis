@@ -18,9 +18,11 @@ class Scan extends StatefulWidget {
   const Scan({
     super.key,
     required this.camera,
+    required this.mustChangeToChess,
   });
 
   final CameraDescription camera;
+  final bool mustChangeToChess;
 
   @override
   ScanState createState() => ScanState();
@@ -151,7 +153,7 @@ class ScanState extends State<Scan> {
                               builder: (context) => DisplayPictureScreen(
                                 // Pass the automatically generated path to
                                 // the DisplayPictureScreen widget.
-                                imagePath: image.path, isButtonVisible: false,
+                                imagePath: image.path, isButtonVisible: false, isCheckers: !widget.mustChangeToChess,
                               ),
                             ),
                           );
