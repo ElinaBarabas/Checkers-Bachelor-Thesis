@@ -269,7 +269,7 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
       }
     else
     {
-
+      
       Navigator.pop(context);
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CustomChessScreen(fenString: fenInput, isPasted: true)));

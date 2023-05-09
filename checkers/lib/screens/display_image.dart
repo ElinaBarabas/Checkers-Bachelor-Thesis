@@ -114,7 +114,7 @@ class DisplayPictureScreen extends StatelessWidget {
           print(message);
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
-                  CustomChessScreen(fenString: message, isPasted: false,)));
+                  CustomChessScreen(fenString: message, isPasted: false)));
         }
       }
     }
@@ -582,7 +582,7 @@ class DisplayPictureScreen extends StatelessWidget {
       ),
       onPressed: () {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true, isCheckers: isCheckers,)));
+            context, MaterialPageRoute(builder: (BuildContext context) => DisplayPictureScreen(imagePath: imagePath, isButtonVisible: true, isCheckers: isCheckers, )));
       },
     );
 

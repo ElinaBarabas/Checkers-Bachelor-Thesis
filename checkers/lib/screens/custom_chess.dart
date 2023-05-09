@@ -21,15 +21,22 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
   late bool isMate = false;
   late bool isStaleMate = false;
   late bool isDraw = false;
+  late bool isInvalid = false;
   late bool canStart = false;
+  late bool isSelectPlayerDisplayed = true;
+  late String suggestion = "Before starting the game, choose whose turn is! \n";
+  late String error = "";
 
-  final List<bool> selectedPlayer= <bool>[false, false];
+
+  final List<bool> selectedPlayer= <bool>[false, true];
 
   @override
   void initState() {
 
+    error = "";
     //4k2r/6r1/8/8/8/8/3R4/R3K3 b Qk - 0 1
     controller.loadFen(widget.fenString);
+
 
     super.initState();
     controller.addListener(_onControllerChanged);
@@ -55,6 +62,9 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    checkConfiguration(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFF211810),
       appBar: AppBar(
@@ -73,62 +83,30 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
       ),
       body: Column(
         children: [
-          Card(
-            color: const Color.fromRGBO(255, 255, 255, 1.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40),
-            ),
-            elevation: 3,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset(
-                      "images/drag.png",
-                      scale: 3,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Before starting the game, choose whose turn is! \n"
-                                  "For making a move, you must drag a piece to the field on which you want to place it.",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ]),
-                    ),
-                  )
-                ],
+          error != "" ? buildErrorWidget() : const SizedBox(width: 1 ,),
+          error == "" && !isInvalid ? buildMovingSuggestionWidget() : const SizedBox(width: 1,height: 50,),
+          // (!canStart && !widget.isPasted) ? showAlertDialog(context) : SizedBox(width: 1,),
+          const SizedBox(height: 5),
+          (!widget.isPasted && isSelectPlayerDisplayed && error == "") ? buildSelectCurrentPlayer() : const SizedBox(width: 1,),
+          const SizedBox(height: 5),
+
+          GestureDetector(
+            onVerticalDragStart: hide(context),
+            onTap: hide(context),
+            child: Center(
+              child: ChessBoard(
+                controller: controller,
+                boardColor: BoardColor.darkBrown,
+                boardOrientation: PlayerColor.white,
               ),
             ),
           ),
-          // (!canStart && !widget.isPasted) ? showAlertDialog(context) : SizedBox(width: 1,),
-          const SizedBox(height: 5),
-          (!widget.isPasted) ? buildSelectCurrentPlayer() : const SizedBox(width: 1,),
-
-          Center(
-            child: ChessBoard(
-              controller: controller,
-              boardColor: BoardColor.darkBrown,
-              boardOrientation: PlayerColor.white,
-            ),
-          ),
-          SizedBox(height: 5),
+          SizedBox(height: 30),
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[buildCurrentPlayerWidget()],),
-          buildCheckWidget(),
+          SizedBox(height: 10),
+          buildMatchStatesWidget(),
+
 
         ],
       ),
@@ -137,12 +115,15 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
 
   buildCurrentPlayerWidget() {
 
-    if(isMate || isStaleMate || isDraw) {
+    print(isSelectPlayerDisplayed);
+    print(!widget.isPasted && isSelectPlayerDisplayed && error == "");
+
+    if(isMate || isStaleMate || isDraw || isInvalid) {
       return SizedBox(
           width: 360,
           height: 60,
           child: GestureDetector(
-              onTap: () => {controller.resetBoard()},
+              onTap: () => {isInvalid = false, error = "", controller.resetBoard()},
               child: Card(
                 color: const Color.fromRGBO(238, 222, 189, 1),
                 shape: RoundedRectangleBorder(
@@ -215,7 +196,7 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
     );
   }
 
-  buildCheckWidget() {
+  buildMatchStatesWidget() {
 
     var currentTurn = controller.game.turn.toString();
 
@@ -463,6 +444,125 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
         ),
     );
   }
+
+   checkConfiguration(BuildContext context) {
+
+    try {
+      print(controller.getPossibleMoves());
+    }
+    catch(e)
+    {
+      error = "Invalid Match";
+      isInvalid = true;
+      setState(() {
+
+      });
+    }
+
+
+  }
+
+  Widget buildErrorWidget() {
+
+    return SizedBox(
+      height: 75,
+      child: Card(
+        color: const Color.fromRGBO(255, 255, 255, 1.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40),
+        ),
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Image.asset(
+                  "images/king.png",
+                  scale: 2,
+                ),
+              ),
+              Expanded(
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 5),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Invalid Configuration!",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ]),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+  }
+
+  buildMovingSuggestionWidget() {
+
+    return Card(
+      color: const Color.fromRGBO(255, 255, 255, 1.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(40),
+      ),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Image.asset(
+                "images/drag.png",
+                scale: 3,
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "$suggestion"
+                            "For making a move, you must drag a piece to the field on which you want to place it.",
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ]),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+
+  }
+
+  hide(BuildContext context) {
+
+    suggestion = "";
+    isSelectPlayerDisplayed = false;
+  }
+
 
 
 }

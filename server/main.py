@@ -46,8 +46,8 @@ def uploadChess():
 
         print("CHESS")
 
-        if os.path.exists("CHESS/output-chessify"):
-            shutil.rmtree("CHESS/output-chessify")
+        # if os.path.exists("CHESS/output-chessify"):
+        shutil.rmtree("output-chessify")
 
         imageFile = request.files['image']
 
