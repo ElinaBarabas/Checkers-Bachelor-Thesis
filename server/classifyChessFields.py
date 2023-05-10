@@ -54,7 +54,7 @@ def convert_matrix_to_fen(matrix):
 
 
 def classifyChessFields():
-    model = load_model("chessify-2.h5")
+    model = load_model("chessify-2 - nou.h5")
 
     untested_fields = os.listdir("output-chessify")
 
@@ -64,6 +64,8 @@ def classifyChessFields():
     i = 0
 
     for elem in untested_fields:
+
+
         field_coordinates = elem.split(".")[0][-4:]
         field_coordinates = field_coordinates.split("-")
         row = field_coordinates[0]

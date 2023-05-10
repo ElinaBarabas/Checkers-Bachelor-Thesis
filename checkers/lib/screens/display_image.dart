@@ -65,9 +65,11 @@ class DisplayPictureScreen extends StatelessWidget {
     if(isCheckers)
       {
         request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/upload"));    //ASTA E LOCAL CARE MERGE
+        //  request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.214:50100/upload"));
       }
     else {
       request = http.MultipartRequest("POST", Uri.parse("http://192.168.5.175:50100/chessify"));    //ASTA E LOCAL CARE MERGE
+      // request = http.MultipartRequest("POST", Uri.parse("http://172.30.113.214:50100/chessify"));
     }
 
 

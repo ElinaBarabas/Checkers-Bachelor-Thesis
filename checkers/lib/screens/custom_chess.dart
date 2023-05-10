@@ -26,6 +26,7 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
   late bool isSelectPlayerDisplayed = true;
   late String suggestion = "Before starting the game, choose whose turn is! \n";
   late String error = "";
+  late bool isInitialConfiguration = false;
 
 
   final List<bool> selectedPlayer= <bool>[false, true];
@@ -35,6 +36,11 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
 
     error = "";
     //4k2r/6r1/8/8/8/8/3R4/R3K3 b Qk - 0 1
+    if(widget.fenString == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+      {
+        isInitialConfiguration = true;
+      }
+
     controller.loadFen(widget.fenString);
 
 
@@ -87,7 +93,7 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
           error == "" && !isInvalid ? buildMovingSuggestionWidget() : const SizedBox(width: 1,height: 1,),
           // (!canStart && !widget.isPasted) ? showAlertDialog(context) : SizedBox(width: 1,),
           const SizedBox(height: 5),
-          (!widget.isPasted && isSelectPlayerDisplayed && error == "") ? buildSelectCurrentPlayer() : const SizedBox(width: 1, height: 1,),
+          (!widget.isPasted && isSelectPlayerDisplayed && error == "" && !isInitialConfiguration) ? buildSelectCurrentPlayer() : const SizedBox(width: 1, height: 1,),
           const SizedBox(height: 5),
 
           GestureDetector(
