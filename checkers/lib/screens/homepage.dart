@@ -87,7 +87,7 @@ class _HomepageState extends State<Homepage> {
                 children: const [
 
                   Text(
-                    "Checkers",
+                    "SmartBoard Scanner",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 30,
