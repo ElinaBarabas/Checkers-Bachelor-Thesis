@@ -28,6 +28,7 @@ def convert_chars(matrix):
 
     return matrix
 
+
 def convert_matrix_to_fen(matrix):
     fen = ''
     empty_count = 0
@@ -46,15 +47,14 @@ def convert_matrix_to_fen(matrix):
         fen += '/'
 
     fen = fen[:-1] + " w KQkq - 0 1"
-
-    # fen = "8/8/3K4/8/8/4P3/7k/8 w KQkq - 0 1"
-
-    print(fen)
     return fen
 
 
+    # fen = "8/8/3K4/8/8/4P3/7k/8 w KQkq - 0 1"
+
+
 def classifyChessFields():
-    model = load_model("chessify-2 - nou.h5")
+    model = load_model("chessify-2.h5")
 
     untested_fields = os.listdir("output-chessify")
 
@@ -64,8 +64,6 @@ def classifyChessFields():
     i = 0
 
     for elem in untested_fields:
-
-
         field_coordinates = elem.split(".")[0][-4:]
         field_coordinates = field_coordinates.split("-")
         row = field_coordinates[0]

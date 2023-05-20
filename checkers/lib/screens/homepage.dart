@@ -45,14 +45,14 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       _cardDetailView("images/chess.png", "Chess",
                           "Learn by playing"),
-                      _cardDetailView("images/checker-board.png", "Checkers",
-                      "Play from scratch"),
-                      _cardDetailView("images/game.png", "Chessify",
+                      _cardDetailView("images/game1.png", "Chessify",
                           "Play Chess from a custom configuration"),
+                      _cardDetailView("images/checker-board.png", "Checkers",
+                          "Play from scratch"),
                       _cardDetailView("images/qr-code.png", "Scan",
                           "Virtualize the Checkers physical match"),
                       _cardDetailView("images/rules.png", "Rules",
-                          "How to play Checkers"),
+                          "How to play"),
 
                     ],
                   ),

@@ -1,8 +1,6 @@
-import 'dart:io';
 
 import 'package:checkers/screens/custom_chess.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../chess_logic/chess_board_controller.dart';
@@ -62,8 +60,10 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
                     children: [
                       isPastePressed ? showFENInputWidget() :  _cardDetailView("images/paste.png", "paste",
                           "Start from FEN (Forsyth-Edwards Notation)"),
+                      const SizedBox(height: 20),
                       _cardDetailView("images/upload.png", "upload",
                           "Upload from Gallery "),
+                      const SizedBox(height: 20),
                       _cardDetailView("images/camera.png", "camera",
                           "Take Picture"),
                     ],
@@ -141,7 +141,7 @@ class _SelectChessMatchSourceState extends State<SelectChessMatchSource> {
             borderRadius: BorderRadius.circular(40),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 30.0, top: 25, bottom: 25, right: 12),
+            padding: const EdgeInsets.only(left: 30.0, top: 20, bottom: 20, right: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

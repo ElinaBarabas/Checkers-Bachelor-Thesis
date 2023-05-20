@@ -241,7 +241,7 @@ class _CustomChessScreenState extends State<CustomChessScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              "    Stalemate!",
+                              "       Stalemate!",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 17,

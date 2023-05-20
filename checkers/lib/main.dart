@@ -20,6 +20,7 @@ Future<void> main() async {
 
   // Ensure that plugin services are initialized so that `availableCameras()`
 // can be called before `runApp()`
+
   WidgetsFlutterBinding.ensureInitialized();
 
 // Obtain a list of the available cameras on the device.
@@ -43,6 +44,7 @@ Future<void> main() async {
   checkUserConnection();
 
   runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const Homepage(),
         // '/scan': (context) => Scan(camera: firstCamera),

@@ -13,10 +13,10 @@ from flask_limiter import Limiter
 
 app = Flask(__name__)
 
-limiter = Limiter(
-    app,
-    default_limits=["100 per day", "50 per hour"],
-)
+# limiter = Limiter(
+#     app,
+#     default_limits=["100 per day", "50 per hour"],
+# )
 
 
 @app.route('/upload', methods=["POST"])
