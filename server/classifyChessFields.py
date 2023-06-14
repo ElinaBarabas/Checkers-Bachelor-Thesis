@@ -23,8 +23,8 @@ def convert_chars(matrix):
             else:
                 matrix[i][j] = str(current_element[1]).lower()
 
-    for elem in matrix:
-        print(elem)
+    # for elem in matrix:
+    #     print(elem)
 
     return matrix
 
